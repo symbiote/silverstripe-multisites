@@ -114,13 +114,21 @@ class Multisites {
 			// Re-parse the protocol and host to ensure it's in a consistent
 			// format.
 			$host  = Director::protocolAndHost();
+			
 			$parts = parse_url($host);
 			$host  = "{$parts['scheme']}://{$parts['host']}";
 
 			if(isset($this->map['hosts'][$host])) {
 				$this->currentId = $this->map['hosts'][$host];
 			} else {
-				$this->currentId = $this->getDefaultSiteId();
+				// see if we're using sub URLs
+				$base  = Director::baseURL();
+				$host = rtrim($host.$base, '/');
+				if(isset($this->map['hosts'][$host])) {
+					$this->currentId = $this->map['hosts'][$host];
+				} else {
+					$this->currentId = $this->getDefaultSiteId();
+				}
 			}
 		}
 
@@ -144,7 +152,7 @@ class Multisites {
 	public function getAssetsFolder(){
 		if(!$this->assetsFolder){
 			$currentSite 		= $this->getCurrentSite();
-			$siteFolderName 	= $currentSite->Host ? $currentSite->Host : "site-$currentSite->ID";
+			$siteFolderName 	= $currentSite->Host ? str_replace('/', '-', $currentSite->Host) : "site-$currentSite->ID";
 			$this->assetsFolder	= Folder::find_or_make($siteFolderName);	
 		}
 
