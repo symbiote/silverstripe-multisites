@@ -1,0 +1,9 @@
+---
+Name: modelascontrollerroutes
+Before: framework/routes#coreroutes
+After: cms/routes#modelascontrollerroutes
+---
+Director:
+  rules:
+    '': MultisitesRootController
+    '$URLSegment//$Action/$ID/$OtherID': MultisitesFrontController

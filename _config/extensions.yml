@@ -1,0 +1,18 @@
+---
+Name: extensions
+---
+CMSMain:
+  extensions:
+    ['MultisitesCMSMainExtension']
+SiteTree:
+  extensions:
+    ['MultisitesSiteTreeExtension']
+ContentController:
+  extensions:
+    ['MultisitesContentControllerExtension']
+FileField:
+  extensions:
+    ['MultisitesFileFieldExtension']
+HtmlEditorField_Toolbar:
+  extensions:
+    ['MultisitesHtmlEditorField_ToolbarExtension']

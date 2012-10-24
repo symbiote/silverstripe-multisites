@@ -1,0 +1,8 @@
+---
+Name: sitetree
+---
+SiteTree:
+  can_be_root: false
+
+Site:
+  can_be_root: true
