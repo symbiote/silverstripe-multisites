@@ -114,13 +114,21 @@ class Multisites {
 			// Re-parse the protocol and host to ensure it's in a consistent
 			// format.
 			$host  = Director::protocolAndHost();
+			
 			$parts = parse_url($host);
 			$host  = "{$parts['scheme']}://{$parts['host']}";
 
 			if(isset($this->map['hosts'][$host])) {
 				$this->currentId = $this->map['hosts'][$host];
 			} else {
-				$this->currentId = $this->getDefaultSiteId();
+				// see if we're using sub URLs
+				$base  = Director::baseURL();
+				$host = rtrim($host.$base, '/');
+				if(isset($this->map['hosts'][$host])) {
+					$this->currentId = $this->map['hosts'][$host];
+				} else {
+					$this->currentId = $this->getDefaultSiteId();
+				}
 			}
 		}
 
