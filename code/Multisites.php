@@ -152,7 +152,7 @@ class Multisites {
 	public function getAssetsFolder(){
 		if(!$this->assetsFolder){
 			$currentSite 		= $this->getCurrentSite();
-			$siteFolderName 	= $currentSite->Host ? $currentSite->Host : "site-$currentSite->ID";
+			$siteFolderName 	= $currentSite->Host ? str_replace('/', '-', $currentSite->Host) : "site-$currentSite->ID";
 			$this->assetsFolder	= Folder::find_or_make($siteFolderName);	
 		}
 
