@@ -13,6 +13,7 @@ class MultisitesContentControllerExtension extends Extension {
 	}
 
 	public function getSiteMenu($level = 1) {
+
 		$site = Multisites::inst()->getCurrentSite();
 		$page = $this->owner->data();
 		$result = new ArrayList();
@@ -30,7 +31,7 @@ class MultisitesContentControllerExtension extends Extension {
 				array_unshift($stack, $parent);
 			}
 
-			if(!isset($stack[$leve - 2])) {
+			if(!isset($stack[$level - 2])) {
 				return;
 			}
 
