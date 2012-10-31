@@ -26,3 +26,7 @@ CMSMenu::remove_menu_item('CMSSettingsController');
 LeftAndMain::require_css('multisites/css/MultisitesAdmin.css');
 
 SiteTree::set_create_default_pages(false);
+
+// Remove LeftAndMain.AddForm.js - at least until this ticket is resolved
+// http://open.silverstripe.org/ticket/7987
+Requirements::block(FRAMEWORK_ADMIN_DIR . '/javascript/LeftAndMain.AddForm.js');
