@@ -25,6 +25,7 @@ class MultisitesInitTask extends BuildTask {
 		foreach($pages as $page) {
 			$page->ParentID = $site->ID;
 			$page->write();
+			$page->publish('Stage', 'Live');
 		}
 
 		echo "Created a default site and placed $count pages under it.";
