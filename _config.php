@@ -21,7 +21,6 @@ if(!ClassInfo::exists('MultiValueField')) {
 
 CMSMenu::remove_menu_item('MultisitesCMSSiteAddController');
 CMSMenu::remove_menu_item('MultisitesCMSPageAddController');
-CMSMenu::remove_menu_item('CMSSettingsController');
 
 LeftAndMain::require_css('multisites/css/MultisitesAdmin.css');
 

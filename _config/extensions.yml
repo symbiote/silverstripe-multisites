@@ -16,3 +16,6 @@ FileField:
 HtmlEditorField_Toolbar:
   extensions:
     ['MultisitesHtmlEditorField_ToolbarExtension']
+SiteConfig:
+  extensions:
+    ['MultisitesSiteConfigExtension']
