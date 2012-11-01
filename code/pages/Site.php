@@ -74,12 +74,20 @@ class Site extends Page implements HiddenClass {
 			return sprintf('%s://%s', $this->Scheme, $this->Host);
 		}
 	}
+	
+	public function Link($action = null) {
+		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
+			return parent::Link($action);
+		}
+		return Controller::join_links($this->RelativeLink($action));
+	}
 
 	public function RelativeLink($action = null) {
+		
 		if($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return $action;
 		} else {
-			return Controller::join_links($this->getUrl(), '/', $action);
+			return Controller::join_links($this->getUrl(), Director::baseURL(), $action);
 		}
 	}
 
