@@ -14,9 +14,10 @@ class MultisitesFrontController extends ModelAsController {
 		}
 
 		if(class_exists('Translatable')) Translatable::disable_locale_filter();
-
+		
+		// Get the homepage for this Site.
 		$page = SiteTree::get()->filter(array(
-			'ParentID'   => $site,
+			'SiteID'   => $site,
 			'URLSegment' => rawurlencode($segment)
 		));
 		$page = $page->first();
