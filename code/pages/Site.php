@@ -68,6 +68,12 @@ class Site extends Page implements HiddenClass {
 				'Multisites.ISDEFAULT', 'Is this the default site?'
 			))
 		)));
+		
+		// Let extensions update CMS fields (allows Translatable to do it's work).
+		// See https://github.com/silverstripe/silverstripe-translatable/issues/4 for reasons behind this if.
+		if (get_called_class() === __CLASS__) {
+			$this->extend('updateCMSFields', $fields);
+		}
 
 		if(is_array(Multisites::$developer_identifiers)){
 
@@ -77,6 +83,7 @@ class Site extends Page implements HiddenClass {
 			));
 		}
 
+		// TODO: Should this be removed/depreciated since updateCMSFields is possible now? 
 		$this->extend('updateSiteCMSFields', $fields);
 
 		return $fields;

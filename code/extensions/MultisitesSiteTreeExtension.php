@@ -22,18 +22,26 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 		return Multisites::inst()->getDefaultSite();
 	}
 
+	/**
+	 * Update the CMSFields form so the correct prefix for URLSegment is displayed.
+	 * 
+	 * @param FieldList $fields 
+	 */
 	public function updateCMSFields(FieldList $fields) {
-		if($this->owner->ParentID) {
-			$url = $this->owner->Parent()->AbsoluteLink();
-		} else {
-			$url = Director::absoluteBaseURL();
-		}
+		
+		// Make sure the URLSegment field actually exists (because it won't for the Site objects).
+		if ($urlSegmentField = $fields->dataFieldByName('URLSegment')) {
+			if($this->owner->ParentID) {
+				$url = $this->owner->Parent()->AbsoluteLink();
+			} else {
+				$url = Director::absoluteBaseURL();
+			}
 
-		if(strlen($url) > 36) {
-			$url = '...' . substr($url, -32);
+			if(strlen($url) > 36) {
+				$url = '...' . substr($url, -32);
+			}
+			$urlSegmentField->setURLPrefix($url);
 		}
-
-		$fields->dataFieldByName('URLSegment')->setURLPrefix($url);
 	}
 	
 	/**
