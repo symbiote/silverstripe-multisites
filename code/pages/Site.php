@@ -124,9 +124,17 @@ class Site extends Page implements HiddenClass {
 			$this->HostAliases = array_map($normalise, $aliases);
 		}
 
+		// If this is the default make sure other sites with the same locale aren't the default.
 		if($this->IsDefault) {
+			
+			// TODO: Is there a good reason why LSB is used here? Better not to if it isn't needed.
 			$others = static::get()->where('"SiteTree"."ID" <> ' . $this->ID)->filter('IsDefault', true);
-
+			
+			// Support translatable: other language versions should be able to have a different default site.
+			if ($this->hasExtension('Translatable')) {
+				$others->filter('Locale', $this->Locale);
+			}
+			
 			foreach($others as $other) {
 				$other->IsDefault = false;
 				$other->write();
@@ -137,6 +145,7 @@ class Site extends Page implements HiddenClass {
 	}
 
 	public function onAfterWrite() {
+		// Rebuild the hosts/site map.
 		Multisites::inst()->build();
 		parent::onAfterWrite();
 	}

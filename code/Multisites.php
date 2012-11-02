@@ -9,7 +9,8 @@ class Multisites {
 
 	const CACHE_KEY = 'multisites_map';
 
-	private static $inst;
+	// Store the singleton instance of this class
+	private static $inst; 
 
 	/**
 	 * @var Array - A list of identifiers that can be assigned to a Site (in CMS => Site)
@@ -18,6 +19,41 @@ class Multisites {
 	public static $developer_identifiers;
 
 	protected $cache;
+	
+	/**
+	 * @var array $map An map of site to domain relationships.
+	 * 
+	 * Structure of this array varies depending on whether or not the Translatable module is applied to the SiteTree.
+	 * 
+	 * Without Translatable
+	 * array(
+	 *		'default' => 1, // SiteID of the default site
+	 *		'hosts' => array(
+	 *			'http://www.host.com' => 1, // SiteID of the Site which should be served for this host.
+	 *			'https://www.host.com' => 1,
+	 *			'http://www.host2.com' => 3
+	 *		)
+	 * );
+	 *			
+	 * With Translatable
+	 * array(
+	 *		'default' => array(
+	 *			'en_AU' => 1, // SiteID of the default site for this locale
+	 *			'en_NZ' => 4
+	 *		),
+	 *		'hosts' => array(
+	 *			'http://www.host.com' => array(
+	 *				'en_AU' => 1, // SiteID of the Site which should be served for this host/locale combination.
+	 *				'en_NZ' => 4
+	 *			),
+	 *			'http://www.host2.com' => array(
+	 *				'en_AU' => 2, 
+	 *				'en_NZ' => 5
+	 *			)
+	 *		)
+	 * );
+	 * 
+	 */
 	protected $map;
 
 	protected $default;
@@ -27,6 +63,8 @@ class Multisites {
 	
 
 	/**
+	 * Get the Multisites singleton.
+	 * 
 	 * @return Multisites
 	 */
 	public static function inst() {
@@ -38,17 +76,22 @@ class Multisites {
 		return self::$inst;
 	}
 
-	public function __construct() {
+	/**
+	 * Singleton pattern = private constructor.
+	 */
+	private function __construct() {
 		$this->cache = SS_Cache::factory('Multisites', 'Core', array(
 			'automatic_serialization' => true
 		));
 	}
-
+	
 	/**
+	 * Constructor logic.
+	 * 
 	 * Attempts to load the hostname map from the cache, and rebuilds it if
 	 * it cannot be loaded.
 	 */
-	public function init() {
+	private function init() {
 		$cached = $this->cache->load(self::CACHE_KEY);
 		$valid  = $cached && isset($cached['hosts']);
 
@@ -63,46 +106,81 @@ class Multisites {
 	 * Builds a map of hostnames to sites, and writes it to the cache.
 	 */
 	public function build() {
-		$this->map = array(
-			'default' => null,
-			'hosts'   => array()
-		);
+		
+		$this->map = array();
+		
+		if(class_exists('Translatable')) Translatable::disable_locale_filter();
 
-		// Order the sites so ones with explicit schemes take priority in the
-		// map.
+		// Order the sites so ones with explicit schemes take priority in the map.
 		$sites = Site::get();
 		$sites->sort('Scheme', 'DESC');
-
+		
+		// Is the site tree translatable?
+		$translatable = singleton('SiteTree')->hasExtension('Translatable');
+		
+		// Setup map structure
+		$this->map['default'] = ($translatable) ? array() : null;
+		$this->map['hosts'] = array();
+		
+		// Add each site to the map
 		foreach($sites as $site) {
+			
 			if($site->IsDefault) {
-				$this->map['default'] = $site->ID;
+				if ($translatable) {
+					$this->map['default'][$site->Locale] = $site->ID;
+				} else {
+					$this->map['default'] = $site->ID;
+				}
 			}
 
+			// Compile all possible hosts for this site
 			$hosts = array($site->Host);
 			$hosts = array_merge($hosts, (array) $site->HostAliases->getValue());
 
 			foreach($hosts as $host) {
-				if($site->Scheme != 'https') {
-					$this->map['hosts']["http://$host"] = $site->ID;
-				}
-
-				if($site->Scheme != 'http') {
-					$this->map['hosts']["https://$host"] = $site->ID;
+				
+				// Compile the schemes for this host
+				$schemes = array();
+				if($site->Scheme != 'https') $schemes[] = 'http';
+				if($site->Scheme != 'http') $schemes[] = 'https';
+				
+				foreach ($schemes as $scheme) {
+					
+					// Setup structure of hosts map
+					if ( !isset($this->map['hosts']["$scheme://$host"]) ) {
+						$this->map['hosts']["$scheme://$host"] = ($translatable) ? array() : null;
+					}
+					
+					if ($translatable) {
+						$this->map['hosts']["$scheme://$host"][$site->Locale] = $site->ID;
+					} else {
+						$this->map['hosts']["$scheme://$host"] = $site->ID;
+					}
 				}
 			}
 		}
-
+		if(class_exists('Translatable')) Translatable::enable_locale_filter();
+		
 		$this->cache->save($this->map, self::CACHE_KEY);
 	}
 
 	/**
-	 * @return int
+	 * Get the default site ID
+	 * 
+	 * @return int|null
 	 */
 	public function getDefaultSiteId() {
-		if(isset($this->map['default'])) return $this->map['default'];
+		if (singleton('SiteTree')->hasExtension('Translatable')) {
+			return (isset($this->map['default'])) ? $this->map['default'] : null;
+		} else {
+			$locale = Translatable::get_current_locale();
+			return (isset($this->map['default']) && isset($this->map['default'][$locale])) ? $this->map['default'][$locale] : null;
+		}
 	}
 
 	/**
+	 * Get the default site object for this domain (and locale).
+	 * 
 	 * @return Site
 	 */
 	public function getDefaultSite() {
@@ -117,25 +195,23 @@ class Multisites {
 	 * @return int
 	 */
 	public function getCurrentSiteId() {
+		
+		// If there isn't already on, set it if we can.
 		if(!$this->currentId && $this->map) {
-			// Re-parse the protocol and host to ensure it's in a consistent
-			// format.
-			$host  = Director::protocolAndHost();
 			
+			// Set the fallback to the default site ID
+			$this->currentId = $this->getDefaultSiteId();
+			
+			// Re-parse the protocol and host to ensure it's in a consistent format.
+			$host  = Director::protocolAndHost();
 			$parts = parse_url($host);
-			$host  = "{$parts['scheme']}://{$parts['host']}";
+			$host  = rtrim("{$parts['scheme']}://{$parts['host']}" . Director::baseURL(),'/');
 
+			// If there's a default in the map for this domain, use it.
 			if(isset($this->map['hosts'][$host])) {
-				$this->currentId = $this->map['hosts'][$host];
-			} else {
-				// see if we're using sub URLs
-				$base  = Director::baseURL();
-				$host = rtrim($host.$base, '/');
-				if(isset($this->map['hosts'][$host])) {
-					$this->currentId = $this->map['hosts'][$host];
-				} else {
-					$this->currentId = $this->getDefaultSiteId();
-				}
+				$this->currentId = ( singleton('SiteTree')->hasExtension('Translatable') ) 
+						? $this->map['hosts'][$host][Translatable::get_current_locale()] 
+						: $this->map['hosts'][$host];
 			}
 		}
 
