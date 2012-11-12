@@ -11,14 +11,13 @@ at runtime to change the 'site' context of queries you execute
 ## Installation
 
 * Add the module and the multivaluefield module
-* Run dev/build
-* Run dev/tasks/MultisitesInitTask
+* Run `dev/build`
 
 ## Setting up sites (and additional sites)
 
-* In the backend go to the Pages section and click on the Website 
-* Enter in the full path to the site in the 'Host' field, without the http:// 
-  lead - eg mysitedomain.com, or localhost/sub/folder for a development site
+* In the CMS go to the Pages section and click on the Website 
+* Enter in the full path to the site in the 'Host' field, without the `http://` 
+  lead - eg `mysitedomain.com` or `localhost/sub/folder` for a development site
 * Hit save
 * To add a new site, click the Pages section; you should have an 'Add site' 
   button
@@ -26,4 +25,4 @@ at runtime to change the 'site' context of queries you execute
 
 ## Known issues
 
-* See github
+* See [GitHub](https://github.com/sheadawson/silverstripe-multisites/issues?state=open)
