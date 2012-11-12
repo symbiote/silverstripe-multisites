@@ -35,6 +35,24 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 
 		$fields->dataFieldByName('URLSegment')->setURLPrefix($url);
 	}
+	
+	/**
+	 * Make sure site home pages are loaded at the root of the site.
+	 */
+	public function contentcontrollerInit($controller) {
+		
+		// If we've accessed the homepage as /home/, then we should redirect to /.
+		if($controller->dataRecord && $controller->dataRecord instanceof SiteTree
+			 	&& MultisitesRootController::should_be_on_root($controller->dataRecord) && (!isset($controller->urlParams['Action']) || !$controller->urlParams['Action'] ) 
+				&& !$_POST && !$_FILES && !$controller->redirectedTo() ) {
+			$getVars = $_GET;
+			unset($getVars['url']);
+			if($getVars) $url = "?" . http_build_query($getVars);
+			else $url = "";
+			$controller->redirect($url, 301);
+			return;
+		}
+	}
 
 	public function onBeforeWrite() {
 		if(!$this->owner->SiteID) {
