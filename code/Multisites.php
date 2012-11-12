@@ -241,6 +241,16 @@ class Multisites {
 
 		return $this->assetsFolder;
 	}
+	
+	/**
+	 * Reset cached current site variables. This is required if the current site object changes
+	 * mid request like it can in {@link MultisitesFrontController}.
+	 */
+	public function reset() {
+		$this->currentId = null;
+		$this->current = null;
+		$this->assetsFolder = null;
+	}
 
 
 }

@@ -39,6 +39,7 @@ class MultisitesFrontController extends ModelAsController {
 		
 		// If there's no page matching that description, maybe it's been moved
 		if( !$page && $redirect = $this->checkHistory($segment, $site->ID, $request) ) {
+			// The redirect itself is handled in checkHistory();
 			return $this->response;
 		}
 		
@@ -73,6 +74,8 @@ class MultisitesFrontController extends ModelAsController {
 				}
 				
 				if ( $page ) {
+					// The actual site object has changed so the cached variables in the Multisites singleton are no longer valid.
+					Multisites::inst()->reset();
 					Translatable::set_current_locale($page->Locale);
 					break;
 				}
