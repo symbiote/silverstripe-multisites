@@ -118,5 +118,35 @@ class Site extends Page implements HiddenClass {
 		Multisites::inst()->build();
 		parent::onAfterWrite();
 	}
+	
+	/**
+	 * Make sure there is a site record.
+	 * 
+	 * @return type 
+	 */
+	public function requireDefaultRecords() {
+		parent::requireDefaultRecords();
+		
+		if( !Site::get()->count() ) {
+
+			$site = new Site();
+			$site->Title = _t('Multisites.DEFAULTSITE', 'Default Site');
+			$site->IsDefault = true;
+			$site->write();
+
+			DB::alteration_message('Default site created', 'created');
+
+			$pages = SiteTree::get()->exclude('ID', $site->ID)->filter('ParentID', 0);
+			$count = count($pages);
+
+			foreach($pages as $page) {
+				$page->ParentID = $site->ID;
+				$page->write();
+				$page->publish('Stage', 'Live');
+			}
+
+			DB::alteration_message("Moved $count existing pages under new default site.", 'changed');
+		}
+	}
 
 }
