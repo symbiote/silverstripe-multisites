@@ -73,14 +73,14 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 		}
 		
 		// Make sure SiteID is changed when site tree is reorganised.
-		if ($this->owner->ID && $this->owner->class != 'Site' && $this->owner->isChanged('ParentID')) {
+		if ($this->owner->ID && !($this->owner instanceof Site) && $this->owner->isChanged('ParentID')) {
 			// Get the new parent
 			$parent = DataObject::get_by_id('SiteTree', $this->owner->ParentID);
 			
 			// Make sure the parent exists
 			if ( $parent ) {
 				// Recursively change SiteID for this and all child pages
-				$siteId = ($parent->class == 'Site') ? $parent->ID : $parent->SiteID;
+				$siteId = ($parent instanceof Site) ? $parent->ID : $parent->SiteID;
 				$this->owner->updateSiteID($siteId);
 			}	
 		}
