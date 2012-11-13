@@ -44,5 +44,13 @@ class MultisitesContentControllerExtension extends Extension {
 
 		return $result;
 	}
+	
+	/**
+	 * Make sure a call to Site from templates always returns a valid Site object.
+	 * @return Site The current site.
+	 */
+	public function Site() {
+		return $this->owner->dataRecord->getSite();
+	}
 
 }
