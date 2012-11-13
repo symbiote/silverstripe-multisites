@@ -75,5 +75,16 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 			return $this->owner->RelativeLink($action);
 		}
 	}
+	
+	/**
+	 * Returns the current site object in case this is a fake page (like in the case of  pages served 
+	 * by the {@link Security} controller)
+	 * 
+	 * @return Site
+	 */
+	public function getSite() {
+		$site = $this->owner->getComponent('Site');
+		return ($site->ID) ? $site : Multisites::inst()->getCurrentSite();
+	}
 
 }
