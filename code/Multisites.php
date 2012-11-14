@@ -171,10 +171,10 @@ class Multisites {
 	 */
 	public function getDefaultSiteId() {
 		if (singleton('SiteTree')->hasExtension('Translatable')) {
-			return (isset($this->map['default'])) ? $this->map['default'] : null;
-		} else {
 			$locale = Translatable::get_current_locale();
 			return (isset($this->map['default']) && isset($this->map['default'][$locale])) ? $this->map['default'][$locale] : null;
+		} else {
+			return (isset($this->map['default'])) ? $this->map['default'] : null;
 		}
 	}
 
