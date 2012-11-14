@@ -96,9 +96,11 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 	 */
 	public function updateSiteID($new) {
 		$this->owner->SiteID = $new;
-		if ($this->owner->isChanged('SiteID')) foreach ($this->owner->Children() as $child) {
-			$child->updateSiteID($new);
-			$child->write();
+		if ($this->owner->isChanged('SiteID')) {
+			foreach ($this->owner->Children() as $child) {
+				$child->updateSiteID($new);
+				$child->write();
+			}
 		}
 	}
 
