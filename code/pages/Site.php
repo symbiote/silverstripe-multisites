@@ -3,6 +3,10 @@
  * @package silverstripe-multisites
  */
 class Site extends Page implements HiddenClass {
+	
+	public static $singular_name = 'Site';
+	public static $plural_name = 'Sites';
+	public static $description = 'A page type which provides a subsite.';
 
 	public static $db = array(
 		'Title'       => 'Varchar(255)',
