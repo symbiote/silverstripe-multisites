@@ -11,6 +11,12 @@ class Multisites {
 
 	private static $inst;
 
+	/**
+	 * @var Array - A list of identifiers that can be assigned to a Site (in CMS => Site)
+	 * for a developer to identify a Site instance in their code.
+	 */
+	public static $developer_identifiers;
+
 	protected $cache;
 	protected $map;
 
@@ -18,6 +24,7 @@ class Multisites {
 	protected $currentId;
 	protected $current;
 	protected $assetsFolder;
+	
 
 	/**
 	 * @return Multisites
@@ -158,5 +165,6 @@ class Multisites {
 
 		return $this->assetsFolder;
 	}
+
 
 }

@@ -16,6 +16,7 @@ class Site extends Page implements HiddenClass {
 		'Host'        => 'Varchar(100)',
 		'HostAliases' => 'MultiValueField',
 		'IsDefault'   => 'Boolean',
+		'DevID'		  => 'Varchar' // developer identifier
 	);
 
 	public static $defaults = array(
@@ -35,6 +36,8 @@ class Site extends Page implements HiddenClass {
 		'Url'       => 'URL',
 		'IsDefault' => 'Is Default'
 	);
+
+	public static $developer_identifiers = array();
 
 	public static $icon = 'multisites/images/world.png';
 
@@ -65,6 +68,14 @@ class Site extends Page implements HiddenClass {
 				'Multisites.ISDEFAULT', 'Is this the default site?'
 			))
 		)));
+
+		if(is_array(Multisites::$developer_identifiers)){
+
+			$fields->push(DropdownField::create('DevID', _t(
+				'Multisites.DeveloperIdentifier', 'Developer Identifier'),
+				Multisites::$developer_identifiers
+			));
+		}
 
 		$this->extend('updateSiteCMSFields', $fields);
 
