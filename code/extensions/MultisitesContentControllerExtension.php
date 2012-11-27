@@ -20,7 +20,7 @@ class MultisitesContentControllerExtension extends Extension {
 
 		if($level == 1) {
 			$pages = SiteTree::get()->filter(array(
-				'ParentID' => $site->ID,
+				'ParentID' => $site ? $site->ID : 0,
 				'ShowInMenus' => true
 			));
 		} else {
