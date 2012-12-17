@@ -71,7 +71,7 @@ class Site extends Page implements HiddenClass {
 
 		if(is_array(Multisites::$developer_identifiers)){
 
-			$fields->push(DropdownField::create('DevID', _t(
+			$fields->addFieldToTab('Root.Main', DropdownField::create('DevID', _t(
 				'Multisites.DeveloperIdentifier', 'Developer Identifier'),
 				Multisites::$developer_identifiers
 			));
