@@ -209,9 +209,11 @@ class Multisites {
 
 			// If there's a default in the map for this domain, use it.
 			if(isset($this->map['hosts'][$host])) {
-				$this->currentId = ( singleton('SiteTree')->hasExtension('Translatable') ) 
-						? $this->map['hosts'][$host][Translatable::get_current_locale()] 
-						: $this->map['hosts'][$host];
+				if ( singleton('SiteTree')->hasExtension('Translatable') ) {
+					if ( isset($this->map['hosts'][$host][Translatable::get_current_locale()]) ) $this->currentId = $this->map['hosts'][$host][Translatable::get_current_locale()];
+				} else {
+					$this->currentId = $this->map['hosts'][$host];
+				}
 			}
 		}
 
