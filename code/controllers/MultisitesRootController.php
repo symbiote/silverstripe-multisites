@@ -71,6 +71,15 @@ class MultisitesRootController extends RootURLController {
 	 * @return string
 	 */
 	public static function get_homepage_link() {
+		
+		if (
+			class_exists('Translatable')
+			&& Object::has_extension('SiteTree', 'Translatable')
+			&& $link = Translatable::get_homepage_link_by_locale(Translatable::get_current_locale())
+		) {
+			return $link;
+		}
+		
 		return self::$default_homepage_link;
 	}
 	

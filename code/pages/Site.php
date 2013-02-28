@@ -97,6 +97,37 @@ class Site extends Page implements HiddenClass {
 		}
 	}
 	
+	/**
+	 * Get the homepage object for this site
+	 * @return type
+	 */
+	public function getHomepage() {
+		
+		if ($this->hasExtension('Translatable')) {
+			$site = $this->getTranslation(Translatable::default_locale());
+			Translatable::disable_locale_filter();
+			$home = SiteTree::get()
+				->filter(array(
+					'ParentID'   => $site->ID,
+					'URLSegment' => MultisitesRootController::get_default_homepage_link()
+			))->first();
+			Translatable::enable_locale_filter();
+			if ($home) {
+				$translated = $home->getTranslation($this->Locale);
+				if ($translated) {
+					return $translated;
+				} else { // Fallback to untranslated home
+					return $home;
+				}
+			}
+		} else {
+			return SiteTree::get()->filter(array(
+				'ParentID' => $this->ID,
+				'URLSegment' => MultisitesRootController::get_default_homepage_link()
+			))->first();
+		}
+	}
+	
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return parent::Link($action);
@@ -105,7 +136,7 @@ class Site extends Page implements HiddenClass {
 	}
 
 	public function RelativeLink($action = null) {
-		
+
 		if($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return $action;
 		} else {
