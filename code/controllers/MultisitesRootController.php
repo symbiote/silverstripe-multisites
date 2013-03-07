@@ -4,6 +4,13 @@
  */
 class MultisitesRootController extends RootURLController {
 
+	/**
+	 * This function handles requests for the homepage on a site.
+	 * 
+	 * @param SS_HTTPRequest $request
+	 * @param DataModel $model
+	 * @return type 
+	 */
 	public function handleRequest(SS_HTTPRequest $request, DataModel $model = null) {
 		self::$is_at_root = true;
 
@@ -15,12 +22,14 @@ class MultisitesRootController extends RootURLController {
 			return $this->getNotFoundResponse();
 		}
 
-		$page = SiteTree::get()->filter(array(
-			'ParentID'   => $site,
-			'URLSegment' => 'home'
-		));
+		$page = SiteTree::get()
+			->filter(array(
+				'ParentID'   => $site,
+				'URLSegment' => self::$default_homepage_link
+			))
+			->first();
 
-		if(!$page = $page->first()) {
+		if( ! $page ) {
 			return $this->getNotFoundResponse($site);
 		}
 
@@ -62,6 +71,15 @@ class MultisitesRootController extends RootURLController {
 	 * @return string
 	 */
 	public static function get_homepage_link() {
+		
+		if (
+			class_exists('Translatable')
+			&& Object::has_extension('SiteTree', 'Translatable')
+			&& $link = Translatable::get_homepage_link_by_locale(Translatable::get_current_locale())
+		) {
+			return $link;
+		}
+		
 		return self::$default_homepage_link;
 	}
 	

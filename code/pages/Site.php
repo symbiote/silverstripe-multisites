@@ -68,6 +68,12 @@ class Site extends Page implements HiddenClass {
 				'Multisites.ISDEFAULT', 'Is this the default site?'
 			))
 		)));
+		
+		// Let extensions update CMS fields (allows Translatable to do it's work).
+		// See https://github.com/silverstripe/silverstripe-translatable/issues/4 for reasons behind this if.
+		if (get_called_class() === __CLASS__) {
+			$this->extend('updateCMSFields', $fields);
+		}
 
 		if(is_array(Multisites::$developer_identifiers)){
 
@@ -77,6 +83,7 @@ class Site extends Page implements HiddenClass {
 			));
 		}
 
+		// TODO: Should this be removed/depreciated since updateCMSFields is possible now? 
 		$this->extend('updateSiteCMSFields', $fields);
 
 		return $fields;
@@ -90,6 +97,37 @@ class Site extends Page implements HiddenClass {
 		}
 	}
 	
+	/**
+	 * Get the homepage object for this site
+	 * @return type
+	 */
+	public function getHomepage() {
+		
+		if ($this->hasExtension('Translatable')) {
+			$site = $this->getTranslation(Translatable::default_locale());
+			Translatable::disable_locale_filter();
+			$home = SiteTree::get()
+				->filter(array(
+					'ParentID'   => $site->ID,
+					'URLSegment' => MultisitesRootController::get_default_homepage_link()
+			))->first();
+			Translatable::enable_locale_filter();
+			if ($home) {
+				$translated = $home->getTranslation($this->Locale);
+				if ($translated) {
+					return $translated;
+				} else { // Fallback to untranslated home
+					return $home;
+				}
+			}
+		} else {
+			return SiteTree::get()->filter(array(
+				'ParentID' => $this->ID,
+				'URLSegment' => MultisitesRootController::get_default_homepage_link()
+			))->first();
+		}
+	}
+	
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return parent::Link($action);
@@ -98,7 +136,7 @@ class Site extends Page implements HiddenClass {
 	}
 
 	public function RelativeLink($action = null) {
-		
+
 		if($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return $action;
 		} else {
@@ -117,9 +155,17 @@ class Site extends Page implements HiddenClass {
 			$this->HostAliases = array_map($normalise, $aliases);
 		}
 
+		// If this is the default make sure other sites with the same locale aren't the default.
 		if($this->IsDefault) {
+			
+			// TODO: Is there a good reason why LSB is used here? Better not to if it isn't needed.
 			$others = static::get()->where('"SiteTree"."ID" <> ' . $this->ID)->filter('IsDefault', true);
-
+			
+			// Support translatable: other language versions should be able to have a different default site.
+			if ($this->hasExtension('Translatable')) {
+				$others->filter('Locale', $this->Locale);
+			}
+			
 			foreach($others as $other) {
 				$other->IsDefault = false;
 				$other->write();
@@ -130,6 +176,7 @@ class Site extends Page implements HiddenClass {
 	}
 
 	public function onAfterWrite() {
+		// Rebuild the hosts/site map.
 		Multisites::inst()->build();
 		parent::onAfterWrite();
 	}
