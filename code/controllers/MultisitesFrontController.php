@@ -83,7 +83,7 @@ class MultisitesFrontController extends ModelAsController {
 		}
 		
 		// If there's still no page, options are exhausted
-		if ( !$page ) return $this->getNotFoundResponse($site);
+		if ( !$page ) return $this->getNotFoundResponse($site->ID);
 
 		return self::controller_for($page, $request->param('Action'));
 	}
