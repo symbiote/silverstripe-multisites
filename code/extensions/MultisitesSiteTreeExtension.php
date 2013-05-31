@@ -58,15 +58,21 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 	 * Keep the SiteID field consistent.
 	 */
 	public function onBeforeWrite() {
-		// Set the SiteID for all new pages.
+		// Set the SiteID (and ParentID if required) for all new pages.
 		if(!$this->owner->ID) {
-			if($parent = $this->owner->Parent()) {
+			if ($this->owner instanceof Site){
+				// Initialise a new Site to the top level
+				$this->owner->SiteID = 0;
+				$this->owner->ParentID = 0;
+			} elseif (($parent = $this->owner->Parent()) && $parent->ID) {
+				// Page is beneath a Site
 				if($parent instanceof Site) {
 					$this->owner->SiteID = $parent->ID;
 				} else {
 					$this->owner->SiteID = $parent->SiteID;
 				}
 			} else {
+				// Create the page beneath the current Site
 				$this->owner->SiteID = Multisites::inst()->getDefaultSiteId();
 				$this->owner->ParentID = $this->owner->SiteID;
 			}
