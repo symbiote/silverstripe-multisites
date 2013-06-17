@@ -10,12 +10,6 @@ SiteTree:
 ContentController:
   extensions:
     ['MultisitesContentControllerExtension']
-FileField:
-  extensions:
-    ['MultisitesFileFieldExtension']
-HtmlEditorField_Toolbar:
-  extensions:
-    ['MultisitesHtmlEditorField_ToolbarExtension']
 SiteConfig:
   extensions:
     ['MultisitesSiteConfigExtension']

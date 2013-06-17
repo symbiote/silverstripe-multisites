@@ -19,6 +19,10 @@ class Site extends Page implements HiddenClass {
 		'DevID'		  => 'Varchar' // developer identifier
 	);
 
+	public static $has_one = array(
+		'Folder' => 'Folder'
+	);
+
 	public static $defaults = array(
 		'Scheme' => 'any'
 	);
@@ -54,6 +58,7 @@ class Site extends Page implements HiddenClass {
 			new TextField('Title', _t('Multisites.TITLE', 'Title')),
 			new TextField('Tagline', _t('Multisites.TAGLINE', 'Tagline/Slogan')),
 			$theme,
+			new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'),
 			new HeaderField('SiteURLHeader', _t('Multisites.SITEURL', 'Site URL')),
 			new OptionsetField('Scheme', _t('Multisites.SCHEME', 'Scheme'), array(
 				'any'   => _t('Multisites.ANY', 'Any'),
