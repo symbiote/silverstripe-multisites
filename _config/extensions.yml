@@ -4,6 +4,9 @@ Name: extensions
 CMSMain:
   extensions:
     ['MultisitesCMSMainExtension']
+ErrorPage:
+  extensions:
+    ['MultisitesErrorPageExtension']
 SiteTree:
   extensions:
     ['MultisitesSiteTreeExtension']
