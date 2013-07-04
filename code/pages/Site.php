@@ -16,7 +16,7 @@ class Site extends Page implements HiddenClass {
 		'Host'        => 'Varchar(100)',
 		'HostAliases' => 'MultiValueField',
 		'IsDefault'   => 'Boolean',
-		'DevID'		  => 'Varchar' // developer identifier
+		'DevID'       => 'Varchar' // developer identifier
 	);
 
 	public static $has_one = array(
@@ -75,7 +75,6 @@ class Site extends Page implements HiddenClass {
 		)));
 
 		if(is_array(Multisites::$developer_identifiers)){
-
 			$fields->addFieldToTab('Root.Main', DropdownField::create('DevID', _t(
 				'Multisites.DeveloperIdentifier', 'Developer Identifier'),
 				Multisites::$developer_identifiers
@@ -138,17 +137,14 @@ class Site extends Page implements HiddenClass {
 		Multisites::inst()->build();
 		parent::onAfterWrite();
 	}
-	
+
 	/**
 	 * Make sure there is a site record.
-	 * 
-	 * @return type 
 	 */
 	public function requireDefaultRecords() {
 		parent::requireDefaultRecords();
-		
-		if( !Site::get()->count() ) {
 
+		if(!Site::get()->count()) {
 			$site = new Site();
 			$site->Title = _t('Multisites.DEFAULTSITE', 'Default Site');
 			$site->IsDefault = true;
