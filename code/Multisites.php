@@ -153,14 +153,43 @@ class Multisites {
 		return $this->current;
 	}
 
+
+	/**
+	 * Get's the site that is currently being edited in the cms
+	 * If a page or site is not being edited, e.g ModelAdmin, 
+	 * it will return @see getCurrentSite() 
+	 * @return Site
+	 */
+	public function getActiveSite(){
+		$controller = Controller::curr();
+		if($controller->class == 'CMSPageEditController'){
+			$page = $controller->currentPage();
+			if($site = $page->Site()){
+				return $site;
+			}
+		}
+		return $this->getCurrentSite();
+	}
+
+
 	/**
 	 * @return Folder
 	 */
 	public function getAssetsFolder(){
 		if(!$this->assetsFolder){
-			$currentSite 		= $this->getCurrentSite();
-			$siteFolderName 	= $currentSite->Host ? str_replace('/', '-', $currentSite->Host) : "site-$currentSite->ID";
-			$this->assetsFolder	= Folder::find_or_make($siteFolderName);	
+			$site = $this->getActiveSite();
+			$folder = $site->Folder();
+			
+			// create the folder if it does not exist
+			if(!$folder->exists()){
+				$siteFolderName = $site->Host ? str_replace('/', '-', $site->Host) : "site-$site->ID";	
+				$folder = Folder::find_or_make($siteFolderName);	
+				$site->FolderID = $folder->ID;
+				$site->write();
+				$site->publish('Stage', 'Live');
+			}
+
+			$this->assetsFolder	= $folder;	
 		}
 
 		return $this->assetsFolder;

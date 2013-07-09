@@ -16,7 +16,11 @@ class Site extends Page implements HiddenClass {
 		'Host'        => 'Varchar(100)',
 		'HostAliases' => 'MultiValueField',
 		'IsDefault'   => 'Boolean',
-		'DevID'		  => 'Varchar' // developer identifier
+		'DevID'       => 'Varchar' // developer identifier
+	);
+
+	public static $has_one = array(
+		'Folder' => 'Folder'
 	);
 
 	public static $defaults = array(
@@ -54,6 +58,7 @@ class Site extends Page implements HiddenClass {
 			new TextField('Title', _t('Multisites.TITLE', 'Title')),
 			new TextField('Tagline', _t('Multisites.TAGLINE', 'Tagline/Slogan')),
 			$theme,
+			new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'),
 			new HeaderField('SiteURLHeader', _t('Multisites.SITEURL', 'Site URL')),
 			new OptionsetField('Scheme', _t('Multisites.SCHEME', 'Scheme'), array(
 				'any'   => _t('Multisites.ANY', 'Any'),
@@ -70,8 +75,7 @@ class Site extends Page implements HiddenClass {
 		)));
 
 		if(is_array(Multisites::$developer_identifiers)){
-
-			$fields->push(DropdownField::create('DevID', _t(
+			$fields->addFieldToTab('Root.Main', DropdownField::create('DevID', _t(
 				'Multisites.DeveloperIdentifier', 'Developer Identifier'),
 				Multisites::$developer_identifiers
 			));
@@ -133,17 +137,14 @@ class Site extends Page implements HiddenClass {
 		Multisites::inst()->build();
 		parent::onAfterWrite();
 	}
-	
+
 	/**
 	 * Make sure there is a site record.
-	 * 
-	 * @return type 
 	 */
 	public function requireDefaultRecords() {
 		parent::requireDefaultRecords();
-		
-		if( !Site::get()->count() ) {
 
+		if(!Site::get()->count()) {
 			$site = new Site();
 			$site->Title = _t('Multisites.DEFAULTSITE', 'Default Site');
 			$site->IsDefault = true;

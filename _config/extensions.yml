@@ -4,18 +4,15 @@ Name: extensions
 CMSMain:
   extensions:
     ['MultisitesCMSMainExtension']
+ErrorPage:
+  extensions:
+    ['MultisitesErrorPageExtension']
 SiteTree:
   extensions:
     ['MultisitesSiteTreeExtension']
 ContentController:
   extensions:
     ['MultisitesContentControllerExtension']
-FileField:
-  extensions:
-    ['MultisitesFileFieldExtension']
-HtmlEditorField_Toolbar:
-  extensions:
-    ['MultisitesHtmlEditorField_ToolbarExtension']
 SiteConfig:
   extensions:
     ['MultisitesSiteConfigExtension']

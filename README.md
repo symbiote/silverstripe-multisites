@@ -23,6 +23,12 @@ at runtime to change the 'site' context of queries you execute
   button
 * Enter details about the new site, the Host field being the most important
 
+## Assets management
+
+You can optionally manage each site's assets in it's own subfolder of the root assets/ directory. 
+
+TODO - Documentation on this to be added.
+
 ## Known issues
 
 * See [GitHub](https://github.com/sheadawson/silverstripe-multisites/issues?state=open)
