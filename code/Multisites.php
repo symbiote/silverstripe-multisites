@@ -21,7 +21,6 @@ class Multisites {
 	protected $map;
 
 	protected $default;
-	protected $currentId;
 	protected $current;
 	protected $assetsFolder;
 	
@@ -117,29 +116,28 @@ class Multisites {
 	 * @return int
 	 */
 	public function getCurrentSiteId() {
-		if(!$this->currentId && $this->map) {
-			// Re-parse the protocol and host to ensure it's in a consistent
-			// format.
-			$host  = Director::protocolAndHost();
-			
-			$parts = parse_url($host);
-			$host  = "{$parts['scheme']}://{$parts['host']}";
+		
+		// Re-parse the protocol and host to ensure it's in a consistent
+		// format.
+		$host  = Director::protocolAndHost();
 
+		$parts = parse_url($host);
+		$host  = "{$parts['scheme']}://{$parts['host']}";
+
+		if($this->map) {
 			if(isset($this->map['hosts'][$host])) {
-				$this->currentId = $this->map['hosts'][$host];
+				return $this->map['hosts'][$host];
 			} else {
 				// see if we're using sub URLs
 				$base  = Director::baseURL();
 				$host = rtrim($host.$base, '/');
 				if(isset($this->map['hosts'][$host])) {
-					$this->currentId = $this->map['hosts'][$host];
-				} else {
-					$this->currentId = $this->getDefaultSiteId();
-				}
+					return $this->map['hosts'][$host];
+				} 
 			}
 		}
 
-		return $this->currentId;
+		return $this->getDefaultSiteId();
 	}
 
 	/**
