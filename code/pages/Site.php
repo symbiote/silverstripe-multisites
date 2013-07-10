@@ -165,4 +165,55 @@ class Site extends Page implements HiddenClass {
 		}
 	}
 
+	/**
+	 * Alternative implementation that takes into account the current site 
+	 * as the root
+	 * 
+	 * @param type $link
+	 * @param type $cache
+	 * @return boolean
+	 */
+	static public function get_by_link($link, $cache = true) {
+		$current = Multisites::inst()->getCurrentSiteId();
+		
+		if(trim($link, '/')) {
+			$link = trim(Director::makeRelative($link), '/');
+		} else {
+			$link = RootURLController::get_homepage_link();
+		}
+		
+		$parts = Convert::raw2sql(preg_split('|/+|', $link));
+		
+		// Grab the initial root level page to traverse down from.
+		$URLSegment = array_shift($parts);
+		
+		$sitetree   = DataObject::get_one (
+			'SiteTree', "\"URLSegment\" = '$URLSegment' AND \"ParentID\" = " . $current, $cache
+		);
+		
+		/// Fall back on a unique URLSegment for b/c.
+		if(!$sitetree && self::nested_urls() && $page = DataObject::get('SiteTree', "\"URLSegment\" = '$URLSegment'")->First()) {
+			return $page;
+		}
+
+		// Check if we have any more URL parts to parse.
+		if(!count($parts)) return $sitetree;
+
+		// Traverse down the remaining URL segments and grab the relevant SiteTree objects.
+		foreach($parts as $segment) {
+			$next = DataObject::get_one (
+				'SiteTree', "\"URLSegment\" = '$segment' AND \"ParentID\" = $sitetree->ID", $cache
+			);
+			
+			if(!$next) {
+				return false;
+			}
+
+			$sitetree->destroy();
+			$sitetree = $next;
+		}
+
+		return $sitetree;
+	}
+
 }
