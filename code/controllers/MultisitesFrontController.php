@@ -39,7 +39,7 @@ class MultisitesFrontController extends ModelAsController {
 					301
 				);
 
-				return $this->respones;
+				return $this->response;
 			}
 
 			return $this->getNotFoundResponse($site);
