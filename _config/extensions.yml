@@ -16,3 +16,6 @@ ContentController:
 SiteConfig:
   extensions:
     ['MultisitesSiteConfigExtension']
+Security:
+  extensions:
+    ['MultisitesSecurityExtension']
