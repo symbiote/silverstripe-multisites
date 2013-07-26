@@ -24,6 +24,28 @@ class MultisitesFrontController extends ModelAsController {
 		if(class_exists('Translatable')) Translatable::enable_locale_filter();
 
 		if(!$page) {
+			// Check to see if linkmapping module is installed and if so, if there a map for this request.
+			if(class_exists('LinkMapping')){
+				if ($request->requestVars()){
+					$queryString = '?';
+					foreach($request->requestVars() as  $key => $value) {
+						if($key !='url'){$queryString .=$key.'='.$value.'&';}
+					}
+					$queryString =  rtrim($queryString,'&');
+				}
+				$link = ($queryString != '?' ? $request->getURL().$queryString : $request->getURL());
+				$link = trim(Director::makeRelative($link));
+
+				$map  = LinkMapping::get()->filter('MappedLink', $link)->first();
+
+				if ($map) {
+					$this->response = new SS_HTTPResponse();
+					$this->response->redirect($map->getLink(), 301);
+					return $this->response;
+				}	
+			}
+			
+
 			if($redirect = self::find_old_page($segment, $site)) {
 				$this->response->redirect(
 					Controller::join_links(
