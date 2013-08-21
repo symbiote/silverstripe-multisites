@@ -12,6 +12,29 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		return _t('Multisites.SITES', 'Sites');
 	}
 
+	
+	public function init(){
+		// set the htmleditor "content_css" based on the active site
+		$htmlEditorConfig = HtmlEditorConfig::get_active();
+		if(!$htmlEditorConfig->getOption('content_css')){
+			$site = Multisites::inst()->getActiveSite();
+			$theme = $site->Theme;
+			if($theme){
+				$cssFile = THEMES_DIR . "/$theme/css/editor.css";
+				if(file_exists(BASE_PATH . '/' . $cssFile)){
+					$htmlEditorConfig->setOption('content_css', $cssFile);
+					
+					if($this->owner->getRequest()->isAjax() && $this->owner->class == 'CMSPageEditController'){
+						// Add editor css path to header so javascript can update ssTinyMceConfig.content_css
+						$this->owner->getResponse()->addHeader('X-HTMLEditor_content_css', $cssFile);	
+					}
+					
+				}	
+			}
+		}
+	}
+
+
 	public function AddSiteForm() {
 		return new Form(
 			$this->owner,
