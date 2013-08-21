@@ -19,10 +19,13 @@ if(!ClassInfo::exists('MultiValueField')) {
 	exit;
 }
 
+if(!defined('MULTISITES_PATH')) define('MULTISITES_PATH', rtrim(basename(dirname(__FILE__))));
+
 CMSMenu::remove_menu_item('MultisitesCMSSiteAddController');
 CMSMenu::remove_menu_item('MultisitesCMSPageAddController');
 
-LeftAndMain::require_css('multisites/css/MultisitesAdmin.css');
+LeftAndMain::require_css(MULTISITES_PATH . '/css/MultisitesAdmin.css');
+LeftAndMain::require_javascript(MULTISITES_PATH . '/javascript/MultisitesAdmin.js');
 
 SiteTree::set_create_default_pages(false);
 
