@@ -41,7 +41,6 @@ class Site extends Page implements HiddenClass {
 		'IsDefault' => 'Is Default'
 	);
 
-	public static $developer_identifiers = array();
 
 	public static $icon = 'multisites/images/world.png';
 
@@ -74,10 +73,12 @@ class Site extends Page implements HiddenClass {
 			))
 		)));
 
-		if(is_array(Multisites::$developer_identifiers)){
+		$devIDs = Config::inst()->get('Multisites', 'developer_identifiers');
+		if(is_array($devIDs)){
+			if(!ArrayLib::is_associative($devIDs)) $devIDs = ArrayLib::valuekey($devIDs);
 			$fields->addFieldToTab('Root.Main', DropdownField::create('DevID', _t(
 				'Multisites.DeveloperIdentifier', 'Developer Identifier'),
-				Multisites::$developer_identifiers
+				$devIDs
 			));
 		}
 
