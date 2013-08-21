@@ -4,6 +4,10 @@
  */
 class MultisitesContentControllerExtension extends Extension {
 
+
+	/**
+	 * Sets the theme to the current site theme
+	 **/
 	public function onAfterInit() {
 		$site = Multisites::inst()->getCurrentSite();
 
@@ -12,8 +16,13 @@ class MultisitesContentControllerExtension extends Extension {
 		}
 	}
 
-	public function getSiteMenu($level = 1) {
 
+	/**
+	 * This method should be used to built navigation menus in templates, 
+	 * instead of ContentController->getMenu()
+	 * @return ArrayList
+	 **/
+	public function getSiteMenu($level = 1) {
 		$site = Multisites::inst()->getCurrentSite();
 		$page = $this->owner->data();
 		$result = new ArrayList();

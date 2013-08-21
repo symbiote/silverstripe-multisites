@@ -13,6 +13,9 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 	}
 
 	
+	/**
+	 * init (called from LeftAndMain extension hook)
+	 **/
 	public function init(){
 		// set the htmleditor "content_css" based on the active site
 		$htmlEditorConfig = HtmlEditorConfig::get_active();
@@ -35,6 +38,11 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 	}
 
 
+
+	/**
+	 * AddSiteForm
+	 * @return Form
+	 **/
 	public function AddSiteForm() {
 		return new Form(
 			$this->owner,
@@ -48,6 +56,10 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		);
 	}
 
+
+	/**
+	 * AddSiteForm action to add a new site
+	 **/
 	public function doAddSite() {
 		$site = $this->owner->getNewItem('new-Site-0', false);
 		$site->write();
@@ -57,11 +69,15 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		);
 	}
 
+
+	/**
+	 * Adds a dropdown field to the search form to filter searches by Site
+	 **/
 	public function updateSearchForm(Form $form) {
 		$cms = $this->owner;
 		$req = $cms->getRequest();
 
-		$sites =  Site::get()->sort(array(
+		$sites = Site::get()->sort(array(
 			'IsDefault' => 'DESC',
 			'Title'     => 'ASC'
 		));

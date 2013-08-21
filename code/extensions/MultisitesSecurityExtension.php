@@ -4,6 +4,9 @@
  */
 class MultisitesSecurityExtension extends Extension{
 	
+	/**
+	 * Sets the theme to the current site theme
+	 **/
 	function onBeforeSecurityLogin(){
 		$site = Multisites::inst()->getCurrentSite();
 

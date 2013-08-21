@@ -4,6 +4,11 @@
  */
 class MultisitesFrontController extends ModelAsController {
 
+
+	/**
+	 * Overrides ModelAsController->getNestedController to find the nested controller
+	 * on a per-site basis
+	 **/
 	public function getNestedController() {
 		$request = $this->request;
 		$segment = $request->param('URLSegment');
@@ -74,6 +79,11 @@ class MultisitesFrontController extends ModelAsController {
 		return self::controller_for($page, $request->param('Action'));
 	}
 
+
+	/**
+	 * Finds the current site's ErrorPage of ErrorCode 404, to redirect the user to
+	 * if the requested page is not found
+	 **/
 	protected function getNotFoundResponse($siteId = null) {
 		$page = ErrorPage::get()->filter(array(
 			'ErrorCode' => 404,
