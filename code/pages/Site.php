@@ -57,7 +57,6 @@ class Site extends Page implements HiddenClass {
 			new TextField('Title', _t('Multisites.TITLE', 'Title')),
 			new TextField('Tagline', _t('Multisites.TAGLINE', 'Tagline/Slogan')),
 			$theme,
-			new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'),
 			new HeaderField('SiteURLHeader', _t('Multisites.SITEURL', 'Site URL')),
 			new OptionsetField('Scheme', _t('Multisites.SCHEME', 'Scheme'), array(
 				'any'   => _t('Multisites.ANY', 'Any'),
@@ -80,6 +79,14 @@ class Site extends Page implements HiddenClass {
 				'Multisites.DeveloperIdentifier', 'Developer Identifier'),
 				$devIDs
 			));
+		}
+
+		if(Multisites::inst()->assetsSubfolderPerSite()){
+			$fields->addFieldToTab(
+				'Root.Main', 
+				new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'), 
+				'SiteURLHeader'
+			);
 		}
 
 		$this->extend('updateSiteCMSFields', $fields);
@@ -131,8 +138,32 @@ class Site extends Page implements HiddenClass {
 			}
 		}
 
+		if($this->ID && Multisites::inst()->assetsSubfolderPerSite() && !$this->Folder()->exists()){
+			$this->FolderID = $this->createAssetsSubfolder();
+		}	
+
 		parent::onBeforeWrite();
 	}
+
+
+	/**
+	 * creates a subfolder in assets/ to store this sites files
+	 * @param Boolean $write - writes the site object if set to true
+	 * @return Int $folder->ID
+	 **/
+	public function createAssetsSubfolder($write = false){
+		$siteFolderName = singleton('URLSegmentFilter')->filter($this->Title);
+		$folder = Folder::find_or_make($siteFolderName);	
+
+		if($write){
+			$this->FolderID = $folder->ID;
+			$this->write();
+			if($this->isPublished()) $this->doPublish();
+		}
+
+		return $folder->ID;
+	}
+
 
 	public function onAfterWrite() {
 		Multisites::inst()->build();

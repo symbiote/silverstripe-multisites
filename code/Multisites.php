@@ -22,7 +22,6 @@ class Multisites {
 
 	protected $default;
 	protected $current;
-	protected $assetsFolder;
 	
 
 	/**
@@ -171,27 +170,11 @@ class Multisites {
 
 
 	/**
-	 * @return Folder
-	 */
-	public function getAssetsFolder(){
-		if(!$this->assetsFolder){
-			$site = $this->getActiveSite();
-			$folder = $site->Folder();
-			
-			// create the folder if it does not exist
-			if(!$folder->exists()){
-				$siteFolderName = $site->Host ? str_replace('/', '-', $site->Host) : "site-$site->ID";	
-				$folder = Folder::find_or_make($siteFolderName);	
-				$site->FolderID = $folder->ID;
-				$site->write();
-				$site->publish('Stage', 'Live');
-			}
-
-			$this->assetsFolder	= $folder;	
-		}
-
-		return $this->assetsFolder;
+	 * Checks to see if we should be using a subfolder in assets for each site.
+	 * @return Boolean
+	 **/
+	public function assetsSubfolderPerSite(){
+		return Object::has_extension('FileField', 'MultisitesFileFieldExtension') || Object::has_extension('HtmlEditorField_Toolbar', 'MultisitesHtmlEditorField_ToolbarExtension');
 	}
-
 
 }
