@@ -47,4 +47,22 @@ The above call to useMultisitesFolder() will change the folder name from 'images
 
 ## Known issues
 
+When linking to a page that belongs to a different site, SiteTree::Link() will return a bad link as it prepends the base URL. Currently the best way to work around this is to implement the following in your Page.php (model class). 
+
+```
+/**
+ * Overrides SiteTree->Link. Adds a check for cases where we are linking to a page on a
+ * different site in this multisites instance.  
+ * @return String 
+ **/
+public function Link($action = null) {
+	if($this->SiteID && $this->SiteID == Multisites::inst()->getCurrentSiteId()) {
+		return parent::Link($action);
+	} else {
+		return $this->RelativeLink($action);
+	}
+}
+
+```
+
 * See [GitHub](https://github.com/sheadawson/silverstripe-multisites/issues?state=open)
