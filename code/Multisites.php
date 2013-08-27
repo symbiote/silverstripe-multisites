@@ -80,6 +80,9 @@ class Multisites {
 			$hosts = array_merge($hosts, (array) $site->HostAliases->getValue());
 
 			foreach($hosts as $host) {
+				if (!$host) {
+					continue;
+				}
 				if($site->Scheme != 'https') {
 					$this->map['hosts']["http://$host"] = $site->ID;
 				}
