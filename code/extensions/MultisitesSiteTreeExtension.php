@@ -25,6 +25,9 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 	public function updateCMSFields(FieldList $fields) {
 		if($this->owner->ParentID) {
 			$url = $this->owner->Parent()->AbsoluteLink();
+			if(!$url){
+				$url = $this->owner->Parent()->getURL() . '/';
+			}
 		} else {
 			$url = Director::absoluteBaseURL();
 		}

@@ -110,7 +110,6 @@ class Site extends Page implements HiddenClass {
 	}
 
 	public function RelativeLink($action = null) {
-		
 		if($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return $action;
 		} else {
