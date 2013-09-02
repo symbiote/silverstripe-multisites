@@ -62,7 +62,7 @@ class MultisitesRootController extends RootURLController {
 	 * @return string
 	 */
 	public static function get_homepage_link() {
-		return self::$default_homepage_link;
+		return Config::inst()->get(get_called_class(), 'default_homepage_link');
 	}
 	
 	/**

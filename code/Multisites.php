@@ -177,7 +177,7 @@ class Multisites {
 	 * @return Boolean
 	 **/
 	public function assetsSubfolderPerSite(){
-		return Object::has_extension('FileField', 'MultisitesFileFieldExtension') || Object::has_extension('HtmlEditorField_Toolbar', 'MultisitesHtmlEditorField_ToolbarExtension');
+		return FileField::has_extension('MultisitesFileFieldExtension');
 	}
 
 }
