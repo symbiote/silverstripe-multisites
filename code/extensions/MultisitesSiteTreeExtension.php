@@ -4,7 +4,7 @@
  */
 class MultisitesSiteTreeExtension extends SiteTreeExtension {
 
-	public static $has_one = array(
+	private static $has_one = array(
 		'Site' => 'Site'
 	);
 
