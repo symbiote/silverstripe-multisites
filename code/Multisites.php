@@ -164,9 +164,18 @@ class Multisites {
 		$controller = Controller::curr();
 		if($controller->class == 'CMSPageEditController'){
 			$page = $controller->currentPage();
-			if($site = $page->Site()){
+			
+			if($page instanceof Site){	
+				return $page;
+			}
+
+			$site = $page->Site();
+
+			if($site->ID){
 				return $site;
 			}
+
+
 		}
 		return $this->getCurrentSite();
 	}
