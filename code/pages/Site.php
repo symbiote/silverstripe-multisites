@@ -4,11 +4,11 @@
  */
 class Site extends Page implements HiddenClass {
 	
-	public static $singular_name = 'Site';
-	public static $plural_name = 'Sites';
-	public static $description = 'A page type which provides a subsite.';
+	private static $singular_name = 'Site';
+	private static $plural_name = 'Sites';
+	private static $description = 'A page type which provides a subsite.';
 
-	public static $db = array(
+	private static $db = array(
 		'Title'       => 'Varchar(255)',
 		'Tagline'     => 'Varchar(255)',
 		'Theme'       => 'Varchar(255)',
@@ -19,30 +19,30 @@ class Site extends Page implements HiddenClass {
 		'DevID'       => 'Varchar' // developer identifier
 	);
 
-	public static $has_one = array(
+	private static $has_one = array(
 		'Folder' => 'Folder'
 	);
 
-	public static $defaults = array(
+	private static $defaults = array(
 		'Scheme' => 'any'
 	);
 
-	public static $default_sort = '"Title"';
+	private static $default_sort = '"Title"';
 
-	public static $searchable_fields = array(
+	private static $searchable_fields = array(
 		'Title'     => 'Title',
 		'Domain'    => 'Domain',
 		'IsDefault' => 'Is Default'
 	);
 
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title'     => 'Title',
 		'Url'       => 'URL',
 		'IsDefault' => 'Is Default'
 	);
 
 
-	public static $icon = 'multisites/images/world.png';
+	private static $icon = 'multisites/images/world.png';
 
 	public function getCMSFields() {
 		$conf = SiteConfig::current_site_config();
