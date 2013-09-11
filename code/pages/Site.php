@@ -253,22 +253,17 @@ class Site extends Page implements HiddenClass {
 	 * @return Boolean
 	 **/
 	public function hasFeature($feature){
-		if(!$this->DevID){
-			return false;
-		}	
+		if(!$this->DevID) return false;
 
-		$sites = Config::inst()->get('Muiltisites', 'site_features');
+		$sites = Config::inst()->get('Multisites', 'site_features');
+		
+		if(!isset($sites[$this->DevID])) return false;
 
-		if(!isset($sites[$this->DevID]){
-			return false;
-		}
+		$features = ArrayLib::valuekey($sites[$this->DevID]);
 
-		if(!isset($sites[$this->DevID][$feature])){
-			return false;
-		}
+		if(!isset($features[$feature])) return false;
 
 		return true;
-
 	}
 
 }
