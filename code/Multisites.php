@@ -10,12 +10,19 @@ class Multisites {
 	const CACHE_KEY = 'multisites_map';
 
 	private static $inst;
-
+	
 	/**
 	 * @var Array - A list of identifiers that can be assigned to a Site (in CMS => Site)
 	 * for a developer to identify a Site instance in their code.
 	 */
-	public static $developer_identifiers;
+	private static $developer_identifiers;
+
+
+	/**
+	 * @var Array - A list of features to be used on a given Site, identified by developer_identifiers
+	 */
+	private static $site_features;
+
 
 	protected $cache;
 	protected $map;

@@ -247,4 +247,28 @@ class Site extends Page implements HiddenClass {
 		return $sitetree;
 	}
 
+
+	/**
+	 * Checks to see if this site has a feature as defined in Muiltisites.site_features config
+	 * @return Boolean
+	 **/
+	public function hasFeature($feature){
+		if(!$this->DevID){
+			return false;
+		}	
+
+		$sites = Config::inst()->get('Muiltisites', 'site_features');
+
+		if(!isset($sites[$this->DevID]){
+			return false;
+		}
+
+		if(!isset($sites[$this->DevID][$feature])){
+			return false;
+		}
+
+		return true;
+
+	}
+
 }
