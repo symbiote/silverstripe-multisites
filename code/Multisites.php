@@ -159,9 +159,9 @@ class Multisites {
 
 
 	/**
-	 * Get's the site that is currently being edited in the cms
-	 * If a page or site is not being edited, e.g ModelAdmin, 
-	 * it will return @see getCurrentSite() 
+	 * Get's the site related to what is currently being edited in the cms
+	 * If a page or site is being edited, it will look up the site of the sitetree being edited, 
+	 * If a MultisitesAware object is being managed in ModelAdmin, ModelAdmin will have set a Session variable MultisitesModelAdmin_SiteID  
 	 * @return Site
 	 */
 	public function getActiveSite(){
@@ -178,8 +178,10 @@ class Multisites {
 			if($site->ID){
 				return $site;
 			}
-
-
+		}elseif(is_subclass_of($controller, 'ModelAdmin')){
+			if($id = Session::get('MultisitesModelAdmin_SiteID')){
+				return Site::get()->byID($id);
+			}
 		}
 		return $this->getCurrentSite();
 	}
@@ -192,5 +194,28 @@ class Multisites {
 	public function assetsSubfolderPerSite(){
 		return FileField::has_extension('MultisitesFileFieldExtension');
 	}
+
+
+	/**
+	 * Finds sites that the given member is a "Manager" of
+	 * A manager is currently defined by a Member who has edit access to a Site Object
+	 * @var Member $member
+	 * @return array - Site IDs
+	 **/
+	public function sitesManagedByMember($member = null){
+		$member = $member ?: Member::currentUser();
+		if(!$member) return array();
+		
+		$sites = Site::get();
+
+		if(Permission::check('ADMIN')){
+			return $sites->column('ID');
+		}
+
+		$memberGroups = $member->Groups()->column('ID');
+		$sites = $sites->filter("EditorGroups.ID:ExactMatch", $memberGroups);
+
+		return $sites->column('ID');
+	}	
 
 }

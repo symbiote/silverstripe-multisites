@@ -4,18 +4,24 @@ Name: extensions
 CMSMain:
   extensions:
     ['MultisitesCMSMainExtension']
-ErrorPage:
-  extensions:
-    ['MultisitesErrorPageExtension']
-SiteTree:
-  extensions:
-    ['MultisitesSiteTreeExtension']
 ContentController:
   extensions:
     ['MultisitesContentControllerExtension']
-SiteConfig:
+ErrorPage:
   extensions:
-    ['MultisitesSiteConfigExtension']
+    ['MultisitesErrorPageExtension']
+Member:
+  extensions:
+    ['MultisitesMemberExtension']
+ModelAdmin:
+  extensions:
+    ['MultisitesModelAdminExtension']
 Security:
   extensions:
     ['MultisitesSecurityExtension']
+SiteConfig:
+  extensions:
+    ['MultisitesSiteConfigExtension']
+SiteTree:
+  extensions:
+    ['MultisitesSiteTreeExtension']
