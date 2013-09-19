@@ -2,7 +2,7 @@
 /**
  * @package silverstripe-multisites
  */
-class Site extends Page implements HiddenClass {
+class Site extends Page implements HiddenClass, PermissionProvider {
 	
 	private static $singular_name = 'Site';
 	private static $plural_name = 'Sites';
@@ -87,6 +87,12 @@ class Site extends Page implements HiddenClass {
 				new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'), 
 				'SiteURLHeader'
 			);
+		}
+
+		if(!Permission::check('SITE_EDIT_CONFIGURATION')){
+			foreach ($fields->dataFields() as $field) {
+				$fields->makeFieldReadonly($field);
+			}
 		}
 
 		$this->extend('updateSiteCMSFields', $fields);
@@ -264,6 +270,16 @@ class Site extends Page implements HiddenClass {
 		if(!isset($features[$feature])) return false;
 
 		return true;
+	}
+
+
+	public function providePermissions() {
+		return array(
+			'SITE_EDIT_CONFIGURATION' => array(
+				'name' => 'Edit Site configuration settings. Eg. Site Title, Host Name etc.',
+				'category' => 'Sites',
+			)
+		);
 	}
 
 }
