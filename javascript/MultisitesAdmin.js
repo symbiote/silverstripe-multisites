@@ -20,7 +20,6 @@
 	$.entwine('ss.tree', function($){
 		$('body .cms-tree').entwine({
 			getTreeConfig: function() {
-				console.log('here');
 				var self = this, config = this._super(), hints = this.getHints();
 				config.plugins.push('contextmenu');
 				config.contextmenu = {
