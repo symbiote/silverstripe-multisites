@@ -55,7 +55,7 @@ class Multisites {
 	 */
 	public function init() {
 		$cached = $this->cache->load(self::CACHE_KEY);
-		$valid  = $cached && isset($cached['hosts']);
+		$valid  = $cached && isset($cached['hosts']) && count($cached['hosts']);
 
 		if($valid) {
 			$this->map = $cached;
@@ -87,6 +87,9 @@ class Multisites {
 			$hosts = array_merge($hosts, (array) $site->HostAliases->getValue());
 
 			foreach($hosts as $host) {
+				if (!$host) {
+					continue;
+				}
 				if($site->Scheme != 'https') {
 					$this->map['hosts']["http://$host"] = $site->ID;
 				}
