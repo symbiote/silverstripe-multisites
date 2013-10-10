@@ -55,7 +55,7 @@ class Multisites {
 	 */
 	public function init() {
 		$cached = $this->cache->load(self::CACHE_KEY);
-		$valid  = $cached && isset($cached['hosts']);
+		$valid  = $cached && isset($cached['hosts']) && count($cached['hosts']);
 
 		if($valid) {
 			$this->map = $cached;
