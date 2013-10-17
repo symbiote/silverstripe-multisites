@@ -36,7 +36,7 @@ class MultisitesContentControllerExtension extends Extension {
 			$parent = $page;
 			$stack = array($page);
 
-			while(($parent = $parent->Parent()) && !($parent instanceof Site)) {
+			while(($parent = $parent->Parent()) && $parent->ID > 0 && !($parent instanceof Site)) {
 				array_unshift($stack, $parent);
 			}
 
