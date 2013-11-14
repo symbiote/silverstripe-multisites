@@ -101,12 +101,21 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	}
 
 	public function getUrl() {
-		if(!$this->Scheme || $this->Scheme == 'any') {
-			return 'http://' . $this->Host;
-		} else {
-			return sprintf('%s://%s', $this->Scheme, $this->Host);
+		if($this->Host){
+			if(!$this->Scheme || $this->Scheme == 'any') {
+				return 'http://' . $this->Host;
+			} else {
+				return sprintf('%s://%s', $this->Scheme, $this->Host);
+			}
+		}else{
+			return Director::absoluteBaseURL();
 		}
 	}
+
+	public function AbsoluteLink($action = null){
+		return $this->getURL() . '/';
+	}
+
 	
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
