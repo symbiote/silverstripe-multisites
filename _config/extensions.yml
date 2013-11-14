@@ -25,3 +25,6 @@ SiteConfig:
 SiteTree:
   extensions:
     ['MultisitesSiteTreeExtension']
+SS_Report:
+  extensions:
+    - MultisitesReport
