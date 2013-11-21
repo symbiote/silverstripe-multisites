@@ -16,7 +16,8 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		'Host'        => 'Varchar(100)',
 		'HostAliases' => 'MultiValueField',
 		'IsDefault'   => 'Boolean',
-		'DevID'       => 'Varchar' // developer identifier
+		'DevID'       => 'Varchar', // developer identifier
+        'RobotsTxt'   => 'Text'
 	);
 
 	private static $has_one = array(
@@ -24,7 +25,8 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	);
 
 	private static $defaults = array(
-		'Scheme' => 'any'
+		'Scheme' => 'any',
+        'RobotsTxt' => ''
 	);
 
 	private static $default_sort = '"Title"';
@@ -69,7 +71,12 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			),
 			new CheckboxField('IsDefault', _t(
 				'Multisites.ISDEFAULT', 'Is this the default site?'
-			))
+			)),
+            new HeaderField('RobotsTxtHeader', _t('Multisites.ROBOTSTXT', 'Robots.txt')),
+            new LiteralField('RobotsTxtUsage', _t('Multisites.ROBOTSTXTUSAGE',
+                '<p>Please consult <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">http://www.robotstxt.org/robotstxt.html</a> for usage of the robots.txt file.</p>'
+            )),
+            new TextareaField('RobotsTxt', _t('Mulitsites.ROBOTSTXT', '&nbsp;'))
 		)));
 
 		$devIDs = Config::inst()->get('Multisites', 'developer_identifiers');
