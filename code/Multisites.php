@@ -10,12 +10,19 @@ class Multisites {
 	const CACHE_KEY = 'multisites_map';
 
 	private static $inst;
-
+	
 	/**
 	 * @var Array - A list of identifiers that can be assigned to a Site (in CMS => Site)
 	 * for a developer to identify a Site instance in their code.
 	 */
-	public static $developer_identifiers;
+	private static $developer_identifiers;
+
+
+	/**
+	 * @var Array - A list of features to be used on a given Site, identified by developer_identifiers
+	 */
+	private static $site_features;
+
 
 	protected $cache;
 	protected $map;
@@ -48,7 +55,7 @@ class Multisites {
 	 */
 	public function init() {
 		$cached = $this->cache->load(self::CACHE_KEY);
-		$valid  = $cached && isset($cached['hosts']);
+		$valid  = $cached && isset($cached['hosts']) && count($cached['hosts']);
 
 		if($valid) {
 			$this->map = $cached;
@@ -80,6 +87,9 @@ class Multisites {
 			$hosts = array_merge($hosts, (array) $site->HostAliases->getValue());
 
 			foreach($hosts as $host) {
+				if (!$host) {
+					continue;
+				}
 				if($site->Scheme != 'https') {
 					$this->map['hosts']["http://$host"] = $site->ID;
 				}
@@ -152,17 +162,28 @@ class Multisites {
 
 
 	/**
-	 * Get's the site that is currently being edited in the cms
-	 * If a page or site is not being edited, e.g ModelAdmin, 
-	 * it will return @see getCurrentSite() 
+	 * Get's the site related to what is currently being edited in the cms
+	 * If a page or site is being edited, it will look up the site of the sitetree being edited, 
+	 * If a MultisitesAware object is being managed in ModelAdmin, ModelAdmin will have set a Session variable MultisitesModelAdmin_SiteID  
 	 * @return Site
 	 */
 	public function getActiveSite(){
 		$controller = Controller::curr();
 		if($controller->class == 'CMSPageEditController'){
 			$page = $controller->currentPage();
-			if($site = $page->Site()){
+			
+			if($page instanceof Site){	
+				return $page;
+			}
+
+			$site = $page->Site();
+
+			if($site->ID){
 				return $site;
+			}
+		}elseif(is_subclass_of($controller, 'ModelAdmin')){
+			if($id = Session::get('MultisitesModelAdmin_SiteID')){
+				return Site::get()->byID($id);
 			}
 		}
 		return $this->getCurrentSite();
@@ -174,7 +195,30 @@ class Multisites {
 	 * @return Boolean
 	 **/
 	public function assetsSubfolderPerSite(){
-		return Object::has_extension('FileField', 'MultisitesFileFieldExtension') || Object::has_extension('HtmlEditorField_Toolbar', 'MultisitesHtmlEditorField_ToolbarExtension');
+		return FileField::has_extension('MultisitesFileFieldExtension');
 	}
+
+
+	/**
+	 * Finds sites that the given member is a "Manager" of
+	 * A manager is currently defined by a Member who has edit access to a Site Object
+	 * @var Member $member
+	 * @return array - Site IDs
+	 **/
+	public function sitesManagedByMember($member = null){
+		$member = $member ?: Member::currentUser();
+		if(!$member) return array();
+		
+		$sites = Site::get();
+
+		if(Permission::check('ADMIN')){
+			return $sites->column('ID');
+		}
+
+		$memberGroups = $member->Groups()->column('ID');
+		$sites = $sites->filter("EditorGroups.ID:ExactMatch", $memberGroups);
+
+		return $sites->column('ID');
+	}	
 
 }

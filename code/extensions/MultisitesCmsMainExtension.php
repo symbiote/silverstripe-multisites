@@ -4,7 +4,7 @@
  */
 class MultisitesCMSMainExtension extends LeftAndMainExtension {
 
-	public static $allowed_actions = array(
+	private static $allowed_actions = array(
 		'AddSiteForm'
 	);
 

@@ -7,6 +7,10 @@
  */
 class MultisitesCMSPageAddController extends CMSPageAddController {
 
+	private static $allowed_actions = array(
+		'AddForm'
+	);
+
 	public static $url_priority = 43;
 
 	public function AddForm() {
@@ -18,9 +22,11 @@ class MultisitesCMSPageAddController extends CMSPageAddController {
 			'ParentID', '', 'SiteTree', 'ID', 'TreeTitle'
 		));
 
+		$parentID = $this->request->getVar('ParentID');
+		$parentID = $parentID ? $parentID : Multisites::inst()->getCurrentSiteId();
+
 		$parent->setForm($form);
-		$parent->setShowSearch(true);
-		$parent->setValue((int) $this->request->getVar('ParentID'));
+		$parent->setValue((int)$parentID);
 
 		$form->setValidator(new RequiredFields('ParentID'));
 		return $form;

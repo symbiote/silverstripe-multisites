@@ -2,13 +2,13 @@
 /**
  * @package silverstripe-multisites
  */
-class Site extends Page implements HiddenClass {
+class Site extends Page implements HiddenClass, PermissionProvider {
 	
-	public static $singular_name = 'Site';
-	public static $plural_name = 'Sites';
-	public static $description = 'A page type which provides a subsite.';
+	private static $singular_name = 'Site';
+	private static $plural_name = 'Sites';
+	private static $description = 'A page type which provides a subsite.';
 
-	public static $db = array(
+	private static $db = array(
 		'Title'       => 'Varchar(255)',
 		'Tagline'     => 'Varchar(255)',
 		'Theme'       => 'Varchar(255)',
@@ -16,33 +16,35 @@ class Site extends Page implements HiddenClass {
 		'Host'        => 'Varchar(100)',
 		'HostAliases' => 'MultiValueField',
 		'IsDefault'   => 'Boolean',
-		'DevID'       => 'Varchar' // developer identifier
+		'DevID'       => 'Varchar', // developer identifier
+        'RobotsTxt'   => 'Text'
 	);
 
-	public static $has_one = array(
+	private static $has_one = array(
 		'Folder' => 'Folder'
 	);
 
-	public static $defaults = array(
-		'Scheme' => 'any'
+	private static $defaults = array(
+		'Scheme' => 'any',
+        'RobotsTxt' => ''
 	);
 
-	public static $default_sort = '"Title"';
+	private static $default_sort = '"Title"';
 
-	public static $searchable_fields = array(
+	private static $searchable_fields = array(
 		'Title'     => 'Title',
 		'Domain'    => 'Domain',
 		'IsDefault' => 'Is Default'
 	);
 
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title'     => 'Title',
 		'Url'       => 'URL',
 		'IsDefault' => 'Is Default'
 	);
 
 
-	public static $icon = 'multisites/images/world.png';
+	private static $icon = 'multisites/images/world.png';
 
 	public function getCMSFields() {
 		$conf = SiteConfig::current_site_config();
@@ -69,7 +71,12 @@ class Site extends Page implements HiddenClass {
 			),
 			new CheckboxField('IsDefault', _t(
 				'Multisites.ISDEFAULT', 'Is this the default site?'
-			))
+			)),
+            new HeaderField('RobotsTxtHeader', _t('Multisites.ROBOTSTXT', 'Robots.txt')),
+            new LiteralField('RobotsTxtUsage', _t('Multisites.ROBOTSTXTUSAGE',
+                '<p>Please consult <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">http://www.robotstxt.org/robotstxt.html</a> for usage of the robots.txt file.</p>'
+            )),
+            new TextareaField('RobotsTxt', _t('Mulitsites.ROBOTSTXT', '&nbsp;'))
 		)));
 
 		$devIDs = Config::inst()->get('Multisites', 'developer_identifiers');
@@ -89,18 +96,33 @@ class Site extends Page implements HiddenClass {
 			);
 		}
 
+		if(!Permission::check('SITE_EDIT_CONFIGURATION')){
+			foreach ($fields->dataFields() as $field) {
+				$fields->makeFieldReadonly($field);
+			}
+		}
+
 		$this->extend('updateSiteCMSFields', $fields);
 
 		return $fields;
 	}
 
 	public function getUrl() {
-		if(!$this->Scheme || $this->Scheme == 'any') {
-			return 'http://' . $this->Host;
-		} else {
-			return sprintf('%s://%s', $this->Scheme, $this->Host);
+		if($this->Host){
+			if(!$this->Scheme || $this->Scheme == 'any') {
+				return 'http://' . $this->Host;
+			} else {
+				return sprintf('%s://%s', $this->Scheme, $this->Host);
+			}
+		}else{
+			return Director::absoluteBaseURL();
 		}
 	}
+
+	public function AbsoluteLink($action = null){
+		return $this->getURL() . '/';
+	}
+
 	
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
@@ -110,7 +132,6 @@ class Site extends Page implements HiddenClass {
 	}
 
 	public function RelativeLink($action = null) {
-		
 		if($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return $action;
 		} else {
@@ -246,6 +267,35 @@ class Site extends Page implements HiddenClass {
 		}
 
 		return $sitetree;
+	}
+
+
+	/**
+	 * Checks to see if this site has a feature as defined in Muiltisites.site_features config
+	 * @return Boolean
+	 **/
+	public function hasFeature($feature){
+		if(!$this->DevID) return false;
+
+		$sites = Config::inst()->get('Multisites', 'site_features');
+		
+		if(!isset($sites[$this->DevID])) return false;
+
+		$features = ArrayLib::valuekey($sites[$this->DevID]);
+
+		if(!isset($features[$feature])) return false;
+
+		return true;
+	}
+
+
+	public function providePermissions() {
+		return array(
+			'SITE_EDIT_CONFIGURATION' => array(
+				'name' => 'Edit Site configuration settings. Eg. Site Title, Host Name etc.',
+				'category' => 'Sites',
+			)
+		);
 	}
 
 }

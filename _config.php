@@ -32,3 +32,13 @@ SiteTree::set_create_default_pages(false);
 // Remove LeftAndMain.AddForm.js - at least until this ticket is resolved
 // http://open.silverstripe.org/ticket/7987
 Requirements::block(FRAMEWORK_ADMIN_DIR . '/javascript/LeftAndMain.AddForm.js');
+
+SS_Report::add_excluded_reports(array(
+	'SideReport_EmptyPages',
+	'BrokenLinksReport',
+	'SideReport_RecentlyEdited',
+	'SideReport_BrokenLinks',
+	'SideReport_BrokenFiles',
+	'SideReport_BrokenVirtualPages',
+	'SideReport_BrokenRedirectorPages'
+));
