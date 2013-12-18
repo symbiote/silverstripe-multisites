@@ -271,6 +271,17 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
 
 	/**
+	 * Get the name of the theme applied to this site, allow extensions to override
+	 * @return String
+	 **/
+	public function getSiteTheme(){
+		$theme = $this->Theme;
+		$this->extend('updateGetSiteTheme', $theme);
+		return $theme;
+	}
+
+
+	/**
 	 * Checks to see if this site has a feature as defined in Muiltisites.site_features config
 	 * @return Boolean
 	 **/

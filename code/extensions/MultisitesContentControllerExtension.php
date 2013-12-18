@@ -11,8 +11,8 @@ class MultisitesContentControllerExtension extends Extension {
 	public function onAfterInit() {
 		$site = Multisites::inst()->getCurrentSite();
 
-		if($site && $site->Theme) {
-			SSViewer::set_theme($site->Theme);
+		if($site && $theme = $site->getSiteTheme()) {
+			SSViewer::set_theme($theme);
 		}
 	}
 

@@ -21,7 +21,7 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		$htmlEditorConfig = HtmlEditorConfig::get_active();
 		if(!$htmlEditorConfig->getOption('content_css')){
 			$site = Multisites::inst()->getActiveSite();
-			$theme = $site->Theme;
+			$theme = $site->getSiteTheme();
 			if($theme){
 				$cssFile = THEMES_DIR . "/$theme/css/editor.css";
 				if(file_exists(BASE_PATH . '/' . $cssFile)){
