@@ -92,5 +92,18 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 
 		$form->Fields()->insertAfter($site, 'q[Term]');
 	}
+	
+	
+	/**
+	 * Makes the default page id the first child of the current site
+	 * This makes the site tree view load with the current site open instead of just the first one
+	 **/
+	public function updateCurrentPageID(&$id){
+		if (!$id) {
+			if($site = Multisites::inst()->getCurrentSite()){
+				$id = $site->Children()->first();
+			}
+		}
+	}
 
 }
