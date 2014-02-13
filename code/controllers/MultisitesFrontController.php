@@ -51,7 +51,7 @@ class MultisitesFrontController extends ModelAsController {
 			}
 	
 			// use OldPageRedirector if it exists, to find old page
-			if(!class_exists('OldPageRedirector')){
+			if(class_exists('OldPageRedirector')){
 				if($redirect = OldPageRedirector::find_old_page(array($segment), Multisites::inst()->getCurrentSite())){
 					$redirect = SiteTree::get_by_link($url);
 				}
