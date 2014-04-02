@@ -159,6 +159,16 @@ class Multisites {
 
 		return $this->current;
 	}
+	
+	/**
+	 * Reset the currently viewed site
+	 * 
+	 * Useful for code that under the covers swaps the host that we're
+	 * looking at, in particular any static publisher functionality
+	 */
+	public function resetCurrentSite() {
+		$this->current = null;
+	}
 
 
 	/**
