@@ -244,6 +244,10 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			'SiteTree', "\"URLSegment\" = '$URLSegment' AND \"ParentID\" = " . $current, $cache
 		);
 		
+		if (!$sitetree) {
+			return false;
+		}
+		
 		/// Fall back on a unique URLSegment for b/c.
 		if(!$sitetree && self::nested_urls() && $page = DataObject::get('SiteTree', "\"URLSegment\" = '$URLSegment'")->First()) {
 			return $page;
