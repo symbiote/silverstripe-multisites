@@ -23,8 +23,20 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 	}
 
 	public function updateCMSFields(FieldList $fields) {
-		$prefix = $this->owner->Parent()->AbsoluteLink(); 
-		$fields->dataFieldByName('URLSegment')->setURLPrefix($prefix);
+		if($this->owner->ParentID) {
+			$url = $this->owner->Parent()->AbsoluteLink();
+			if(!$url){
+				$url = $this->owner->Parent()->getURL() . '/';
+			}
+		} else {
+			$url = Director::absoluteBaseURL();
+		}
+
+		if(strlen($url) > 36) {
+			$url = '...' . substr($url, -32);
+		}
+
+		$fields->dataFieldByName('URLSegment')->setURLPrefix($url);
 	}
 	
 	/**
