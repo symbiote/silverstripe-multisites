@@ -12,7 +12,7 @@ class MultisitesRootController extends RootURLController {
 		$this->init();
 
 		if(!$site = Multisites::inst()->getCurrentSiteId()) {
-			return $this->getNotFoundResponse();
+			return $this->httpError(404);
 		}
 
 		$page = SiteTree::get()->filter(array(
@@ -21,7 +21,7 @@ class MultisitesRootController extends RootURLController {
 		));
 
 		if(!$page = $page->first()) {
-			return $this->getNotFoundResponse($site);
+			return $this->httpError(404);
 		}
 
 		$request = new SS_HTTPRequest(
@@ -37,22 +37,6 @@ class MultisitesRootController extends RootURLController {
 
 		$this->popCurrent();
 		return $response;
-	}
-
-	protected function getNotFoundResponse($siteId = null) {
-		$page = ErrorPage::get()->filter(array(
-			'ErrorCode' => 404,
-			'SiteID'    => $siteId ?: Multisites::inst()->getDefaultSiteId()
-		));
-
-		if($page = $page->first()) {
-			$controller = ModelAsController::controller_for($page);
-			$request    = new SS_HTTPRequest('GET', '');
-
-			return $controller->handleRequest($request, $this->model);
-		} else {
-			return new SS_HTTPResponse(null, 404);
-		}
 	}
 	
 	/**

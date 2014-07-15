@@ -22,10 +22,5 @@ class MultisitesErrorPageExtension extends SiteTreeExtension {
 
 		return sprintf("%s/error-%s.html", $path, implode('-', $parts));
 	}
-	
-	public function augmentSQL(\SQLQuery &$query) {
-		if (Multisites::inst()->getCurrentSiteId()) {
-			$query->addWhere('"SiteID" = ' . Multisites::inst()->getCurrentSiteId());
-		}
-	}
+
 }
