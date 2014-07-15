@@ -4,6 +4,9 @@ Name: extensions
 CMSMain:
   extensions:
     ['MultisitesCMSMainExtension']
+Controller:
+  extensions:
+    ['MultisitesControllerExtension']
 ContentController:
   extensions:
     ['MultisitesContentControllerExtension']

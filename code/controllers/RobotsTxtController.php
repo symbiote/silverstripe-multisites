@@ -19,7 +19,7 @@ class RobotsTxtController extends Controller {
         $site    = Multisites::inst()->getCurrentSiteId();
 
         if(!$site) {
-            return $this->getNotFoundResponse();
+            return $this->httpError(404);
         }
 
         $page = Site::get()->filter(array(
@@ -29,7 +29,7 @@ class RobotsTxtController extends Controller {
         $page = $page->first();
 
         if(!$page) {
-            return $this->getNotFoundResponse();
+            return $this->httpError(404);
         }
 
         /*
@@ -41,30 +41,11 @@ class RobotsTxtController extends Controller {
         $text = trim($page->RobotsTxt);
 
         if(empty($text)) {
-            return $this->getNotFoundResponse();
+            return $this->httpError(404);
         }
 
         $this->getResponse()->addHeader('Content-Type', 'text/plain; charset="utf-8"');
         return $text;
     }
 
-    /**
-     * Finds the current site's ErrorPage of ErrorCode 404, to redirect the user to
-     * if the requested page is not found.
-     **/
-    protected function getNotFoundResponse($siteId = null) {
-        $page = ErrorPage::get()->filter(array(
-            'ErrorCode' => 404,
-            'SiteID'    => $siteId ?: Multisites::inst()->getDefaultSiteId()
-        ));
-
-        if($page = $page->first()) {
-            $controller = ModelAsController::controller_for($page);
-            $request    = new SS_HTTPRequest('GET', '');
-
-            return $controller->handleRequest($request, $this->model);
-        } else {
-            return new SS_HTTPResponse(null, 404);
-        }
-    }
 }

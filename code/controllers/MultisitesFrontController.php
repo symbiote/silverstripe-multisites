@@ -15,7 +15,7 @@ class MultisitesFrontController extends ModelAsController {
 		$site    = Multisites::inst()->getCurrentSiteId();
 
 		if(!$site) {
-			return $this->getNotFoundResponse();
+			return $this->httpError(404);
 		}
 
 		if(class_exists('Translatable')) Translatable::disable_locale_filter();
@@ -83,7 +83,7 @@ class MultisitesFrontController extends ModelAsController {
 				return $this->response;
 			}
 
-			return $this->getNotFoundResponse($site);
+			return $this->httpError(404);
 		}
 
 		if(class_exists('Translatable') && $page->Locale) {
@@ -91,27 +91,6 @@ class MultisitesFrontController extends ModelAsController {
 		}
 
 		return self::controller_for($page, $request->param('Action'));
-	}
-
-
-	/**
-	 * Finds the current site's ErrorPage of ErrorCode 404, to redirect the user to
-	 * if the requested page is not found
-	 **/
-	protected function getNotFoundResponse($siteId = null) {
-		$page = ErrorPage::get()->filter(array(
-			'ErrorCode' => 404,
-			'SiteID'    => $siteId ?: Multisites::inst()->getDefaultSiteId()
-		));
-
-		if($page = $page->first()) {
-			$controller = ModelAsController::controller_for($page);
-			$request    = new SS_HTTPRequest('GET', '');
-
-			return $controller->handleRequest($request, $this->model);
-		} else {
-			return new SS_HTTPResponse(null, 404);
-		}
 	}
 
 }
