@@ -135,7 +135,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		if($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return $action;
 		} else {
-			return Controller::join_links($this->getUrl(), Director::baseURL(), $action);
+			return Controller::join_links($this->getUrl(), $action);
 		}
 	}
 
