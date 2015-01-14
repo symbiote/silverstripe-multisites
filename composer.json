@@ -1,24 +1,15 @@
 {
-	"name": "sheadawson/silverstripe-multisites",
+	"name": "silverstripe-australia/silverstripe-multisites",
 	"description": "Allows for multiple websites to be managed through a single site tree.",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "multisites", "subsites"],
-	"homepage": "http://github.com/sheadawson/silverstripe-multisites",
+	"homepage": "http://github.com/silverstripe-australia/silverstripe-multisites",
 	"authors": [
-	{
-		"name": "Andrew Short",
-		"email": "andrew@silverstripe.com.au"
-	},
-	{
-		"name": "Shea Dawson",
-		"email": "shea@silverstripe.com.au"
-	},
 	{
 		"name": "Marcus Nyeholt",
 		"email": "marcus@silverstripe.com.au"
 	}
 	],
-
 	"require":
 	{
 		"composer/installers": "*",
@@ -28,5 +19,8 @@
 	},
 	"extra": {
 		"installer-name": "multisites"
+	},
+	"replace": {
+		"sheadawson/silverstripe-multisites": "self.version"
 	}
 }
