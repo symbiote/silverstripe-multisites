@@ -5,3 +5,7 @@
 .MultisitesCMSPageAddController #ParentID {
 	margin-top: 10px;
 }
+
+.MultisitesCMSPageAddController .parent-mode {
+	display: none;
+}

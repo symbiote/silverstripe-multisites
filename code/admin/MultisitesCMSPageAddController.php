@@ -18,9 +18,13 @@ class MultisitesCMSPageAddController extends CMSPageAddController {
 		$fields = $form->Fields();
 
 		$fields->push(new HiddenField('Parent', null, true));
-		$fields->replaceField('ParentModeField', $parent = new TreeDropdownField(
+
+		// Enforce a parent mode of "child" to correctly read the "allowed children".
+
+		$fields->dataFieldByName('ParentModeField')->setValue('child');
+		$fields->insertAfter($parent = new TreeDropdownField(
 			'ParentID', '', 'SiteTree', 'ID', 'TreeTitle'
-		));
+		), 'ParentModeField');
 
 		$parentID = $this->request->getVar('ParentID');
 		$parentID = $parentID ? $parentID : Multisites::inst()->getCurrentSiteId();
