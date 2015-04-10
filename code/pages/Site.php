@@ -90,8 +90,8 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
 		if(Multisites::inst()->assetsSubfolderPerSite()){
 			$fields->addFieldToTab(
-				'Root.Main', 
-				new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'), 
+				'Root.Main',
+				new TreeDropdownField('FolderID', _t('Multisites.ASSETSFOLDER', 'Assets Folder'), 'Folder'),
 				'SiteURLHeader'
 			);
 		}
@@ -139,7 +139,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		}
 	}
 
-	protected function onBeforeWrite() {
+	public function onBeforeWrite() {
 		$normalise = function($url) {
 			return trim(str_replace(array('http://', 'https://'), null, $url), '/');
 		};
@@ -161,7 +161,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
 		if($this->ID && Multisites::inst()->assetsSubfolderPerSite() && !$this->Folder()->exists()){
 			$this->FolderID = $this->createAssetsSubfolder();
-		}	
+		}
 
 		parent::onBeforeWrite();
 	}
@@ -174,7 +174,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	 **/
 	public function createAssetsSubfolder($write = false){
 		$siteFolderName = singleton('URLSegmentFilter')->filter($this->Title);
-		$folder = Folder::find_or_make($siteFolderName);	
+		$folder = Folder::find_or_make($siteFolderName);
 
 		if($write){
 			$this->FolderID = $folder->ID;
@@ -219,9 +219,9 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	}
 
 	/**
-	 * Alternative implementation that takes into account the current site 
+	 * Alternative implementation that takes into account the current site
 	 * as the root
-	 * 
+	 *
 	 * @param type $link
 	 * @param type $cache
 	 * @return boolean
