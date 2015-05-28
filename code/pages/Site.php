@@ -211,7 +211,9 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			foreach($pages as $page) {
 				$page->ParentID = $site->ID;
 				$page->write();
-				$page->publish('Stage', 'Live');
+				if ($page->isPublished()) {
+					$page->publish('Stage', 'Live');
+				}
 			}
 
 			DB::alteration_message("Moved $count existing pages under new default site.", 'changed');
