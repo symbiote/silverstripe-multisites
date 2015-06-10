@@ -65,7 +65,7 @@ class Multisites_SideReport_EmptyPages extends SideReport_EmptyPages{
 
 class Multisites_BrokenLinksReport extends BrokenLinksReport{
 	public function columns() {
-		return MultisitesReport::getMultisitesReportColumns();
+		return MultisitesReport::getMultisitesReportColumns() + parent::columns();
 	}
 
 	public function parameterFields() {
