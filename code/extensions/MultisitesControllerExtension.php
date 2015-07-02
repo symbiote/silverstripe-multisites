@@ -7,6 +7,17 @@
 class MultisitesControllerExtension extends Extension {
 
 	/**
+	 * Sets the theme to the current site theme
+	 **/
+	public function onAfterInit() {
+		$site = Multisites::inst()->getCurrentSite();
+
+		if($site && $theme = $site->getSiteTheme()) {
+			SSViewer::set_theme($theme);
+		}
+	}
+	
+	/**
 	 *	Retrieve the correct error page for the current multisite instance.
 	 *	@param integer
 	 *	@param SS_HTTPRequest
