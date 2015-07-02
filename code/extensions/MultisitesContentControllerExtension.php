@@ -4,19 +4,6 @@
  */
 class MultisitesContentControllerExtension extends Extension {
 
-
-	/**
-	 * Sets the theme to the current site theme
-	 **/
-	public function onAfterInit() {
-		$site = Multisites::inst()->getCurrentSite();
-
-		if($site && $theme = $site->getSiteTheme()) {
-			SSViewer::set_theme($theme);
-		}
-	}
-
-
 	/**
 	 * This method should be used to built navigation menus in templates, 
 	 * instead of ContentController->getMenu()
