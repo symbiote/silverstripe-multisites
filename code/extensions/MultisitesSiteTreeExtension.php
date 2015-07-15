@@ -32,9 +32,6 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 			$url = Director::absoluteBaseURL();
 		}
 
-		if(strlen($url) > 36) {
-			$url = '...' . substr($url, -32);
-		}
 
 		$fields->dataFieldByName('URLSegment')->setURLPrefix($url);
 	}
