@@ -18,7 +18,10 @@
 		"silverstripe/multivaluefield": "~2.0"
 	},
 	"extra": {
-		"installer-name": "multisites"
+		"installer-name": "multisites",
+		"branch-alias": {
+			"dev-master": "1.1.x-dev"
+		}
 	},
 	"replace": {
 		"sheadawson/silverstripe-multisites": "self.version"
