@@ -10,12 +10,16 @@ class MultisitesControllerExtension extends Extension {
 	 * Sets the theme to the current site theme
 	 **/
 	public function onAfterInit() {
-		if (Security::database_is_ready()) {
-			$site = Multisites::inst()->getCurrentSite();
+		if ($this->owner instanceof DevelopmentAdmin ||
+			$this->owner instanceof DevBuildController ||
+			$this->owner instanceof DatabaseAdmin) {
+			return;
+		}
 
-			if($site && $theme = $site->getSiteTheme()) {
-				SSViewer::set_theme($theme);
-			}
+		$site = Multisites::inst()->getCurrentSite();
+
+		if($site && $theme = $site->getSiteTheme()) {
+			SSViewer::set_theme($theme);
 		}
 	}
 	
