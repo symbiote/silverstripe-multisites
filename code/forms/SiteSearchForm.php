@@ -6,6 +6,13 @@
  */
 class SiteSearchForm extends SearchForm {
 	
+	/**
+	 * Restrict searches to the site 
+	 *
+	 * @var boolean
+	 */
+	private static $restrict_files_by_site = true;
+	
 	public function getResults($pageLength = null, $data = null){
 	 	// legacy usage: $data was defaulting to $_REQUEST, parameter not passed in doc.silverstripe.org tutorials
 		if(!isset($data) || !is_array($data)) $data = $_REQUEST;
@@ -35,12 +42,24 @@ class SiteSearchForm extends SearchForm {
 		if(!$pageLength) $pageLength = $this->pageLength;
 		$start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 		
-		$siteFilter = 'SiteID = ' . Multisites::inst()->getCurrentSiteId();
+		$siteFilter = '';
+		$fileFilter = "ID != 0";
+		$site = Multisites::inst()->getCurrentSite();
+		$siteFilter = 'SiteID = ' . $site->ID;
+			
+		if ($this->config()->restrict_files_by_site) {
+			if ($site->FolderID) {
+				$prefix = $site->Folder()->Filename;
+				if (strlen($prefix)) {
+					$fileFilter .= ' AND "Filename" LIKE \'' . Convert::raw2sql($prefix).'%\'';
+				}
+			}
+		}
 
 		if(strpos($keywords, '"') !== false || strpos($keywords, '+') !== false || strpos($keywords, '-') !== false || strpos($keywords, '*') !== false) {
-			$results = DB::getConn()->searchEngine($this->classesToSearch, $keywords, $start, $pageLength, "\"Relevance\" DESC", $siteFilter, true, "ID != 0");
+			$results = DB::getConn()->searchEngine($this->classesToSearch, $keywords, $start, $pageLength, "\"Relevance\" DESC", $siteFilter, true, $fileFilter);
 		} else {
-			$results = DB::getConn()->searchEngine($this->classesToSearch, $keywords, $start, $pageLength, '', $siteFilter, false, "ID != 0");
+			$results = DB::getConn()->searchEngine($this->classesToSearch, $keywords, $start, $pageLength, '', $siteFilter, false, $fileFilter);
 		}
 		
 		// filter by permission
