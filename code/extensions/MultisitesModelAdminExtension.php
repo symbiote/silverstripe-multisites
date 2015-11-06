@@ -12,14 +12,14 @@ class MultisitesModelAdminExtension extends Extension {
 
 	
 	/**
-	 * If this dataClass is MultisitesAware, set the MultisitesModelAdmin_SiteID 
+	 * If this dataClass is MultisitesAware, set the Multisites_ActiveSite 
 	 * session variable to one of the follwing:
 	 * a) The current site, if the current member is a manager of that site
 	 * b) The first site that the current member is a manager of
 	 **/
 	public function onAfterInit(){	
 		if(singleton($this->owner->getList()->dataClass())->hasExtension('MultisitesAware')){
-			if(!Session::get('MultisitesModelAdmin_SiteID')){
+			if(!Session::get('Multisites_ActiveSite')){
 
 				$managedByMember = Multisites::inst()->sitesManagedByMember();
 				
@@ -30,7 +30,7 @@ class MultisitesModelAdminExtension extends Extension {
 					}else{
 						$siteID = $managedByMember[0];
 					}
-					Session::set('MultisitesModelAdmin_SiteID', $siteID);	
+					Multisites::inst()->setActiveSite($siteID);
 				}
 			}
 		}
@@ -38,14 +38,14 @@ class MultisitesModelAdminExtension extends Extension {
 
 	
 	/**
-	 * If this dataClass is MultisitesAware, filter the list by the current MultisitesModelAdmin_SiteID
+	 * If this dataClass is MultisitesAware, filter the list by the current Multisites_ActiveSite
 	 **/
 	public function updateList(&$list){
 		if(singleton($list->dataClass())->hasExtension('MultisitesAware')){
 			if($siteID = $this->owner->getRequest()->requestVar('SiteID')){
-				Session::set('MultisitesModelAdmin_SiteID', $siteID);		
+				Multisites::inst()->setActiveSite($siteID);
 			}
-			$list = $list->filter('SiteID', Session::get('MultisitesModelAdmin_SiteID'));
+			$list = $list->filter('SiteID', Multisites::inst()->getActiveSite());
 		}
 	}
 
@@ -81,7 +81,7 @@ class MultisitesModelAdminExtension extends Extension {
 					'SiteID', 
 					"Site: ", 
 					$source,
-					Session::get('MultisitesModelAdmin_SiteID')
+					Multisites::inst()->getActiveSite()->ID
 				));
 			}
 		}

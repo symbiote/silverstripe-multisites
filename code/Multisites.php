@@ -180,23 +180,49 @@ class Multisites {
 	public function getActiveSite(){
 		$controller = Controller::curr();
 		if($controller->class == 'CMSPageEditController'){
-			$page = $controller->currentPage();
-			
-			if($page instanceof Site){	
-				return $page;
-			}
 
-			$site = $page->Site();
+			// requests to admin/pages/edit/EditorToolbar/viewfile?ID=XX 
+			// are not reliable because $controller->currentPage()
+			// will return an incorrect page based on the ID $_GET parameter
+			if($controller->getRequest()->param('ID') != 'viewfile') {
+				$page = $controller->currentPage();
+				
+				if(!$page) {
+					// fixes fatal error when duplicating page
+					// TODO find the root of the problem...
+					return Site::get()->first();
+				}
 
-			if($site->ID){
-				return $site;
-			}
-		}elseif(is_subclass_of($controller, 'ModelAdmin')){
-			if($id = Session::get('MultisitesModelAdmin_SiteID')){
-				return Site::get()->byID($id);
+				if($page instanceof Site){	
+					$this->setActiveSite($page);
+					return $page;
+				}
+
+				$site = $page->Site();
+
+				if($site->ID){
+					$this->setActiveSite($site);
+					return $site;
+				}
 			}
 		}
+
+		if($id = Session::get('Multisites_ActiveSite')) {
+			return Site::get()->byID($id);
+		}
+
+		// if($id = Session::get('MultisitesModelAdmin_SiteID')) { // legacy
+		// 	return Site::get()->byID($id);
+		// }
+
 		return $this->getCurrentSite();
+	}
+
+
+	public function setActiveSite($site) {
+		$id = is_numeric($site) ? $site : $site->ID;
+		Session::set('Multisites_ActiveSite', $id);
+		Session::set('MultisitesModelAdmin_SiteID', $id); // legacy
 	}
 
 
