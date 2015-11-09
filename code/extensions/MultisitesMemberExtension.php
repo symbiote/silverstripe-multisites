@@ -2,6 +2,7 @@
 class MultisitesMemberExtension extends DataExtension {
 	
 	public function memberLoggedIn(){
-		Session::clear('MultisitesModelAdmin_SiteID');
+		Session::clear('Multisites_ActiveSite');
+		Session::clear('MultisitesModelAdmin_SiteID'); // legacy
 	}
 }
