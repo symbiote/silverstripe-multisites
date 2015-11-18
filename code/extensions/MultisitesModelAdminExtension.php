@@ -45,7 +45,10 @@ class MultisitesModelAdminExtension extends Extension {
 			if($siteID = $this->owner->getRequest()->requestVar('SiteID')){
 				Multisites::inst()->setActiveSite($siteID);
 			}
-			$list = $list->filter('SiteID', Multisites::inst()->getActiveSite());
+			$site = Multisites::inst()->getActiveSite();
+			if ($site) {
+				$list = $list->filter('SiteID', $site->ID);
+			}
 		}
 	}
 
