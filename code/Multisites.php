@@ -205,6 +205,14 @@ class Multisites {
 					return $site;
 				}
 			}
+		} else if (is_subclass_of($controller, 'ModelAdmin')) {
+			// if we are in a model admin that isn't using the global active_site_session,
+			// return it's ActiveSite. This is important for cases where a multisite aware
+			// data object is being saved for the first time in a model admin, we need to 
+			// know what site to save it to
+			if(!$controller->config()->use_active_site_session) {
+				return $controller->getActiveSite();
+			}
 		}
 
 		if($id = Session::get('Multisites_ActiveSite')) {
