@@ -25,7 +25,7 @@ class MultisitesModelAdminExtension extends Extension {
 	 * c) The first site that the current member is a manager of
 	 **/
 	public function onAfterInit(){	
-		if($this->getListDataClass()->hasExtension('MultisitesAware')){
+		if($this->modelIsMultiSitesAware()) {
 
 			if($siteID = $this->owner->getRequest()->requestVar('SiteID')){
 				$this->setActiveSite($siteID);
@@ -52,7 +52,7 @@ class MultisitesModelAdminExtension extends Extension {
 	 * If this dataClass is MultisitesAware, filter the list by the current Multisites_ActiveSite
 	 **/
 	public function updateList(&$list){
-		if($this->getListDataClass()->hasExtension('MultisitesAware')){
+		if($this->modelIsMultiSitesAware()){
 			$site = $this->getActiveSite();
 			if ($site) {
 				$list = $list->filter('SiteID', $site->ID);
@@ -65,7 +65,7 @@ class MultisitesModelAdminExtension extends Extension {
 	 * If the current member is not a "Manager" of any sites, they shouldn't be able to manage MultisitesAware DataObjects.
 	 **/
 	public function updateEditForm($form){
-		if($this->getListDataClass()->hasExtension('MultisitesAware')){
+		if($this->modelIsMultiSitesAware()) {
 			$managedSites = Multisites::inst()->sitesManagedByMember();
 			$source = Site::get()->filter('ID', Multisites::inst()->sitesManagedByMember())->map('ID', 'Title')->toArray();
 			$plural = singleton($this->owner->modelClass)->plural_name();
@@ -82,7 +82,7 @@ class MultisitesModelAdminExtension extends Extension {
 	 * Provide a Site filter
 	 **/
 	public function updateSearchForm($form){
-		if($this->getListDataClass()->hasExtension('MultisitesAware')){
+		if($this->modelIsMultiSitesAware()) {
 			$managedSites = Multisites::inst()->sitesManagedByMember();
 
 			$source = Site::get()->filter('ID', Multisites::inst()->sitesManagedByMember())->map('ID', 'Title')->toArray();
@@ -109,7 +109,7 @@ class MultisitesModelAdminExtension extends Extension {
 		if($this->owner->config()->use_active_site_session) {
 			return Multisites::inst()->getActiveSite();
 		} else {
-			if($this->getListDataClass()->hasExtension('MultisitesAware')) {
+			if($this->modelIsMultiSitesAware()) {
 				if($active = Session::get($this->getActiveSiteSessionKey())) {
 					return Site::get()->byID($active);
 				}
@@ -153,5 +153,16 @@ class MultisitesModelAdminExtension extends Extension {
 			$this->listDataClass = singleton($this->owner->getSearchContext()->getResults(array())->dataClass());
 		}		
 		return $this->listDataClass;
+	}
+
+
+	/**
+	 * Determines whether the current model being managed is MultiSitesAware
+	 *
+	 * @return boolean
+	 **/
+	private function modelIsMultiSitesAware() {
+		$model = $this->getListDataClass();
+		return $model->hasExtension('MultisitesAware') || $model->is_a('SiteTree');
 	}
 }
