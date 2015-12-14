@@ -20,8 +20,7 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		// set the htmleditor "content_css" based on the active site
 		$htmlEditorConfig = HtmlEditorConfig::get_active();
 		$site = Multisites::inst()->getActiveSite();
-		$theme = $site->getSiteTheme();
-		if($theme){
+		if($site && $theme = $site->getSiteTheme()){
 			$cssFile = THEMES_DIR . "/$theme/css/editor.css";
 			if(file_exists(BASE_PATH . '/' . $cssFile)){
 				$htmlEditorConfig->setOption('content_css', $cssFile);
