@@ -8,17 +8,18 @@
  *
  * @package silverstripe-multisites
  */
-class RobotsTxtController extends Controller {
+class RobotsTxtController extends Controller
+{
 
     public static $allowed_actions = array(
         'robots.txt' => 'index'
     );
 
-    public function index() {
-
+    public function index()
+    {
         $site    = Multisites::inst()->getCurrentSiteId();
 
-        if(!$site) {
+        if (!$site) {
             return $this->httpError(404);
         }
 
@@ -28,7 +29,7 @@ class RobotsTxtController extends Controller {
 
         $page = $page->first();
 
-        if(!$page) {
+        if (!$page) {
             return $this->httpError(404);
         }
 
@@ -40,12 +41,11 @@ class RobotsTxtController extends Controller {
          */
         $text = trim($page->RobotsTxt);
 
-        if(empty($text)) {
+        if (empty($text)) {
             return $this->httpError(404);
         }
 
         $this->getResponse()->addHeader('Content-Type', 'text/plain; charset="utf-8"');
         return $text;
     }
-
 }

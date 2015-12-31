@@ -4,23 +4,24 @@
  *
  * @package silverstripe-multisites
  */
-class MultisitesErrorPageExtension extends SiteTreeExtension {
+class MultisitesErrorPageExtension extends SiteTreeExtension
+{
 
-	public function alternateFilepathForErrorcode($code, $locale) {
-		$path  = ErrorPage::get_static_filepath();
-		$parts = array();
+    public function alternateFilepathForErrorcode($code, $locale)
+    {
+        $path  = ErrorPage::get_static_filepath();
+        $parts = array();
 
-		if($site = Multisites::inst()->getActiveSite()) {
-			$parts[] = $site->Host;
-		}
+        if ($site = Multisites::inst()->getActiveSite()) {
+            $parts[] = $site->Host;
+        }
 
-		$parts[] = $code;
+        $parts[] = $code;
 
-		if($locale && $this->owner->hasExtension('Translatable') && $locale != Translatable::default_locale()) {
-			$parts[] = $locale;
-		}
+        if ($locale && $this->owner->hasExtension('Translatable') && $locale != Translatable::default_locale()) {
+            $parts[] = $locale;
+        }
 
-		return sprintf("%s/error-%s.html", $path, implode('-', $parts));
-	}
-
+        return sprintf("%s/error-%s.html", $path, implode('-', $parts));
+    }
 }
