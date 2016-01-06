@@ -1,5 +1,7 @@
 # SilverStripe Multisites
 
+**This version compatible with SilverStripe 3.1**
+
 ## Overview
 
 Allows for multiple websites to be managed through a single site tree. 
@@ -10,7 +12,7 @@ at runtime to change the 'site' context of queries you execute
 
 ## Requirements
 
-* SilverStripe 3.1.*
+* SilverStripe 3.1
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 
 ## Installation
