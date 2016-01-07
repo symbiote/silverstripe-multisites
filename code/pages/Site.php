@@ -73,8 +73,8 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 				'Multisites.ISDEFAULT', 'Is this the default site?'
 			)),
 			new HeaderField('SiteAdvancedHeader', _t('Multisites.SiteAdvancedHeader', 'Advanced Settings')),
-            		(new TextareaField('RobotsTxt', _t('Multisites.ROBOTSTXT', 'Robots.txt')))
-            			->setDescription(_t('Multisites.ROBOTSTXTUSAGE', '<p>Please consult <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">http://www.robotstxt.org/robotstxt.html</a> for usage of the robots.txt file.</p>'))
+            TextareaField::create('RobotsTxt', _t('Multisites.ROBOTSTXT', 'Robots.txt'))
+            	->setDescription(_t('Multisites.ROBOTSTXTUSAGE', '<p>Please consult <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">http://www.robotstxt.org/robotstxt.html</a> for usage of the robots.txt file.</p>'))
 		)));
 
 		$devIDs = Config::inst()->get('Multisites', 'developer_identifiers');
