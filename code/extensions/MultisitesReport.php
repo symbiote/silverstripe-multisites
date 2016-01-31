@@ -126,8 +126,8 @@ class Multisites_SideReport_BrokenLinks extends SideReport_BrokenLinks{
 		return $fields;
 	}
 
-	public function sourceRecords($params = null) {
-		$records = parent::sourceRecords($params);
+	public function sourceRecords($params, $sort, $limit) {
+		$records = parent::sourceRecords($params, $sort, $limit);
 		$site = isset($params['Site']) ? (int)$params['Site'] : 0;
 		if($site > 0){
 			$records = $records->filter('SiteID', $site);

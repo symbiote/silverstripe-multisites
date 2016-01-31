@@ -8,9 +8,13 @@ This is an alternative module to the Subsites module; it avoids any session
 tracking of the 'current' website, and doesn't perform any query modification 
 at runtime to change the 'site' context of queries you execute
 
+**Compatible with SilverStripe 3.2.x**
+
+Please see the 1.2.x version for 3.1 compatibility
+
 ## Requirements
 
-* SilverStripe 3.1.*
+* SilverStripe 3.2.*
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 
 ## Installation

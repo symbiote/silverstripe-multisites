@@ -12,15 +12,13 @@
 	],
 	"require":
 	{
-		"composer/installers": "*",
-		"silverstripe/framework": "3.1.*",
-		"silverstripe/cms": "3.1.*",
-		"silverstripe/multivaluefield": "~2.0"
+		"silverstripe/cms": "~3.2",
+		"silverstripe/multivaluefield": "~2.2"
 	},
 	"extra": {
 		"installer-name": "multisites",
 		"branch-alias": {
-			"dev-master": "1.2.x-dev"
+			"dev-master": "2.0.x-dev"
 		}
 	},
 	"replace": {
