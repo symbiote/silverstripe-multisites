@@ -47,8 +47,8 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 			new FieldList(),
 			new FieldList(
 				FormAction::create('doAddSite', _t('Multisites.ADDSITE', 'Add Site'))
-					->addExtraClass('ss-ui-action-constructive')
-					->setAttribute('data-icon', 'add')
+					->addExtraClass('tool-button font-icon-plus ss-ui-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only')
+			        ->setUseButtonTag(true)
 			)
 		);
 	}

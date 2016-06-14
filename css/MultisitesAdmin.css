@@ -1,5 +1,10 @@
-.cms-content-tools #cms-content-treeview #Form_AddSiteForm {
-	display: none;
+.cms-content-toolbar .cms-actions-buttons-row #Form_AddSiteForm {
+	display: inline-block;
+}
+.cms-content-toolbar .cms-actions-buttons-row #Form_AddSiteForm .Actions {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0;
 }
 
 .MultisitesCMSPageAddController #ParentID {
