@@ -66,6 +66,20 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		);
 	}
 
+	/**
+	 * If viewing 'Site', disable preview panel.
+	 */
+	public function updateEditForm($form) {
+        $classNameField = $form->Fields()->dataFieldByName('ClassName');
+        if ($classNameField) {
+            $className = $classNameField->Value();
+            if ($className === 'Site') 
+            {
+            	$form->Fields()->removeByName(array('SilverStripeNavigator'));
+                $form->removeExtraClass('cms-previewable');
+            }
+        }
+    }
 
 	/**
 	 * Adds a dropdown field to the search form to filter searches by Site
