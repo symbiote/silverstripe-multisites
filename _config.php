@@ -34,6 +34,10 @@ SiteTree::set_create_default_pages(false);
 Requirements::block(FRAMEWORK_ADMIN_DIR . '/javascript/LeftAndMain.AddForm.js');
 
 SS_Report::add_excluded_reports(array(
+    'EmptyPagesReport',
+    'BrokenRedirectorPagesReport',
+    'BrokenVirtualPagesReport',
+    'RecentlyEditedReport',
 	'SideReport_EmptyPages',
 	'BrokenLinksReport',
 	'SideReport_RecentlyEdited',
