@@ -9,7 +9,6 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	private static $description = 'A page type which provides a subsite.';
 
 	private static $db = array(
-		'Title'       => 'Varchar(255)',
 		'Tagline'     => 'Varchar(255)',
 		'Theme'       => 'Varchar(255)',
 		'Scheme'      => 'Enum("any, http, https", "any")',
