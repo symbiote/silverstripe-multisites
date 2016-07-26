@@ -156,6 +156,9 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			}
 		}
 
+		//Set MenuTitle to NULL so that Title is used
+		$this->MenuTitle = NULL;
+		
 		if($this->ID && Multisites::inst()->assetsSubfolderPerSite() && !$this->Folder()->exists()){
 			$this->FolderID = $this->createAssetsSubfolder();
 		}
