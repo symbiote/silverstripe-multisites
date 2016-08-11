@@ -31,6 +31,7 @@ Please see the 1.2.x version for 3.1 compatibility
 * To add a new site, click the Pages section; you should have an 'Add site' 
   button
 * Enter details about the new site, the Host field being the most important
+* Make sure each site has a page that is the homepage - the page URL Segment needs to be "/home"
 
 ## Assets management
 
