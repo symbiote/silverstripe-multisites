@@ -9,6 +9,9 @@ class MultisitesFileFieldExtension extends Extension {
 	 **/
 	public function useMultisitesFolder(){
 		$site = Multisites::inst()->getActiveSite();
+        if (!$site) {
+            return $this->owner;
+        }
 		$multisiteFolder = $site->Folder();
 
 		if(!$multisiteFolder->exists()){
