@@ -31,8 +31,8 @@ class MultisitesFrontController extends ModelAsController {
 		if(!$page) {
 			// Check to see if linkmapping module is installed and if so, if there a map for this request.
 			if(class_exists('LinkMapping')){
+				$queryString = '?';
 				if ($request->requestVars()){
-					$queryString = '?';
 					foreach($request->requestVars() as  $key => $value) {
 						if($key !='url'){$queryString .=$key.'='.$value.'&';}
 					}
