@@ -17,9 +17,22 @@ class MultisitesControllerExtension extends Extension {
 		}
 
 		$site = Multisites::inst()->getCurrentSite();
+		if (!$site) {
+			return;
+		}
 
-		if($site && $theme = $site->getSiteTheme()) {
+		$theme = $site->getSiteTheme();
+		if ($theme) {
 			SSViewer::set_theme($theme);
+		}
+
+		// Update default uploads folder to site
+		$assetDir = Config::inst()->get('Upload', 'uploads_folder');
+		$folder = $site->Folder();
+		if ($folder->exists()) {
+			$siteAssetDir = ltrim($folder->getRelativePath(), ASSETS_DIR.'/');
+			$siteAssetDir = rtrim($siteAssetDir, '/');
+			Config::inst()->update('Upload', 'uploads_folder', $siteAssetDir);
 		}
 	}
 	
