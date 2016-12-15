@@ -10,6 +10,18 @@ class MultisitesControllerExtension extends Extension {
 	 * Sets the theme to the current site theme
 	 **/
 	public function onAfterInit() {
+		if ($this->owner instanceof DatabaseAdmin) {
+			//
+			// 2016-12-16 -	This is disabled in sitetree.yml to stop users placing
+			//				pages above a Site. However, during dev/build we don't
+			//				want pages validated so they can be placed top-level, and
+			//				then be moved underneath Site during it's
+			//				requireDefaultRecords() call.
+			//
+			SiteTree::config()->can_be_root = true;
+			return;
+		}
+
 		if ($this->owner instanceof DevelopmentAdmin ||
 			$this->owner instanceof DevBuildController ||
 			$this->owner instanceof DatabaseAdmin) {

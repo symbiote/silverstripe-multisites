@@ -197,17 +197,21 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function requireDefaultRecords() {
 		parent::requireDefaultRecords();
 
-		if(!Site::get()->count()) {
-			$site = new Site();
-			$site->Title = _t('Multisites.DEFAULTSITE', 'Default Site');
-			$site->IsDefault = true;
-			$site->write();
+		if(DB::query("SELECT COUNT(*) FROM \"SiteTree\" WHERE \"ClassName\" = 'Site'")->value() > 0) {
+			return;
+		}
 
-			DB::alteration_message('Default site created', 'created');
+		$site = Site::create();
+		$site->Title = _t('Multisites.DEFAULTSITE', 'Default Site');
+		$site->IsDefault = true;
+		$site->write();
+		$site->publish('Stage', 'Live');
 
-			$pages = SiteTree::get()->exclude('ID', $site->ID)->filter('ParentID', 0);
-			$count = count($pages);
+		DB::alteration_message('Default site created', 'created');
 
+		$pages = SiteTree::get()->exclude('ID', $site->ID)->filter('ParentID', 0);
+		$count = count($pages);
+		if ($count > 0) {
 			foreach($pages as $page) {
 				$page->ParentID = $site->ID;
 				$page->write();
