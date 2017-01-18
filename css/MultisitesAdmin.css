@@ -9,3 +9,8 @@
 .MultisitesCMSPageAddController .parent-mode {
 	display: none;
 }
+
+#pages-controller-cms-content .cms-panel-padded,
+#pages-controller-cms-content .cms-content-tools .cms-panel-content {
+	padding-top: 16px;
+}
