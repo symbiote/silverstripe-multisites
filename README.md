@@ -8,9 +8,10 @@ This is an alternative module to the Subsites module; it avoids any session
 tracking of the 'current' website, and doesn't perform any query modification 
 at runtime to change the 'site' context of queries you execute
 
-**Compatible with SilverStripe 3.2.x**
+**Compatible with SilverStripe 3.5.x**
 
-Please see the 1.2.x version for 3.1 compatibility
+* Please see 2.0.x for 3.2 compatibility
+* Please see the 1.2.x version for 3.1 compatibility
 
 ## Requirements
 
