@@ -31,3 +31,11 @@ SiteTree:
 SS_Report:
   extensions:
     - MultisitesReport
+---
+Name: extensions_test
+Only:
+  constantdefined: 'PHPUnit_MAIN_METHOD'
+---
+SiteTree:
+  extensions:
+    ['MultisitesSiteTreeTestExtension']
