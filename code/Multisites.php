@@ -265,4 +265,20 @@ class Multisites {
 		return $sites->column('ID');
 	}	
 
+	/**
+	 * Sets up the 'Site' record in-place while running 'cms/tests' and others.
+	 */
+	public function setupIfInTest() {
+		if (!SapphireTest::is_running_test()) {
+			return;
+		}
+		static $inCall = false;
+		if ($inCall !== false) {
+			return;
+		}
+
+		$inCall = true;
+		singleton('Site')->requireDefaultRecords();
+		$inCall = false;
+	}
 }
