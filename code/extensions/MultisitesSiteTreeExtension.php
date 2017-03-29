@@ -54,17 +54,47 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 		}
 	}
 
+	public function validate(ValidationResult $result) {
+		// Required to ensure 'Site' record is built during Travis-CI
+		$this->setupTest();
+	}
+
+	/**
+	 * Sets up the 'Site' record in-place while running 'cms/tests' and others.
+	 */
+	private function setupTest() {
+		if (!SapphireTest::is_running_test() || $this->owner instanceof Site) {
+			return;
+		}
+		Multisites::inst()->setupIfInTest();
+
+		$this->owner->SiteID = (int)Multisites::inst()->getDefaultSiteId();
+		if (!$this->owner->ParentID) {
+			$this->owner->ParentID = $this->owner->SiteID;
+		}
+	}
+
 	/**
 	 * Keep the SiteID field consistent.
 	 */
 	public function onBeforeWrite() {
-		// Set the SiteID (and ParentID if required) for all new pages.
-		if(!$this->owner->ID) {
-			if ($this->owner instanceof Site){
+		if ($this->owner instanceof Site) {
+			if(!$this->owner->ID) {
 				// Initialise a new Site to the top level
 				$this->owner->SiteID = 0;
 				$this->owner->ParentID = 0;
-			} elseif (($parent = $this->owner->Parent()) && $parent->ID) {
+			}
+			return;
+		}
+
+		// NOTE: When building fixtures during unit tests, validation is disabled, so we must
+		//		 call this function here as well.
+		$this->setupTest();
+
+		// Set the SiteID (and ParentID if required) for all new pages.
+		if(!$this->owner->ID) {
+			$parent = $this->owner->Parent();
+			if ($parent && $parent->exists()) {
 				// Page is beneath a Site
 				if($parent instanceof Site) {
 					$this->owner->SiteID = $parent->ID;
@@ -79,7 +109,7 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension {
 		}
 		
 		// Make sure SiteID is changed when site tree is reorganised.
-		if ($this->owner->ID && !($this->owner instanceof Site) && $this->owner->isChanged('ParentID')) {
+		if ($this->owner->ID && $this->owner->isChanged('ParentID')) {
 			// Get the new parent
 			$parent = DataObject::get_by_id('SiteTree', $this->owner->ParentID);
 			

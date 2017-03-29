@@ -1,0 +1,44 @@
+language: php
+php:
+ - 5.3
+
+env:
+  matrix:
+   - DB=MYSQL CORE_RELEASE=3.2
+
+matrix:
+  include:
+    - php: 5.3
+      env: DB=MYSQL CORE_RELEASE=3.2
+    - php: 5.4
+      env: DB=MYSQL CORE_RELEASE=3.2
+    - php: 5.5
+      env: DB=MYSQL CORE_RELEASE=3.3
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3.3
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3.2
+
+before_script:
+ - phpenv rehash
+ - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+ - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
+ - cd ~/builds/ss
+
+script:
+ - vendor/bin/phpunit multisites/tests/
+ # Check multisites/tests/cms for custom overrides
+ - rm cms/tests/controller/CMSMainTest.php
+ - rm cms/tests/controller/CMSSiteTreeFilterTest.php
+ - rm cms/tests/controller/CMSBatchActionsTest.php
+ - rm cms/tests/model/SiteTreeTest.php
+ - rm cms/tests/model/VirtualPageTest.php
+ - rm cms/tests/model/SiteTreeBacklinksTest.php
+ - rm cms/tests/model/SiteTreePermissionsTest.php
+ - rm cms/tests/controller/ContentControllerTest.php
+ - rm cms/tests/controller/ModelAsControllerTest.php
+ - rm cms/tests/controller/ContentControllerPermissionsTest.php
+ # Run CMS tests
+ - vendor/bin/phpunit cms/tests/ '' flush=all
