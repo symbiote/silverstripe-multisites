@@ -39,11 +39,10 @@ class MultisitesControllerExtension extends Extension {
 		}
 
 		// Update default uploads folder to site
-		$assetDir = Config::inst()->get('Upload', 'uploads_folder');
 		$folder = $site->Folder();
 		if ($folder->exists()) {
-			$siteAssetDir = ltrim($folder->getRelativePath(), ASSETS_DIR.'/');
-			$siteAssetDir = rtrim($siteAssetDir, '/');
+			$assetPos = strpos($folder->getRelativePath(), ASSETS_DIR) + strlen(ASSETS_DIR);
+			$siteAssetDir = trim(substr($folder->getRelativePath(), $assetPos), '/');
 			Config::inst()->update('Upload', 'uploads_folder', $siteAssetDir);
 		}
 	}

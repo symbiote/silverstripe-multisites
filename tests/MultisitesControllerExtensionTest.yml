@@ -1,0 +1,6 @@
+ContentControllerTest_Page:
+  # Force generation of Default Site
+  root_page:
+    Title: Home Page
+    URLSegment: home
+
