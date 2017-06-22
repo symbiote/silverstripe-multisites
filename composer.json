@@ -3,7 +3,7 @@
 	"description": "Allows for multiple websites to be managed through a single site tree.",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "multisites", "subsites"],
-	"homepage": "http://github.com/silverstripe-australia/silverstripe-multisites",
+	"homepage": "http://github.com/symbiote/silverstripe-multisites",
 	"authors": [
 	{
 		"name": "Marcus Nyeholt",
@@ -13,7 +13,7 @@
 	"require":
 	{
 		"silverstripe/cms": "~3.2",
-		"silverstripe/multivaluefield": "~2.2"
+		"symbiote/silverstripe-multivaluefield": "~2.2"
 	},
 	"extra": {
 		"installer-name": "multisites",
