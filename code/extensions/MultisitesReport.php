@@ -4,7 +4,7 @@
  * Override default reports to provide columns and filters that help the user identify which site the 
  * report or page being reported on is associated with
  * @package multisites
- * @author shea@silverstripe.com.au
+ * @author shea@symbiote.com.au
  **/
 class MultisitesReport extends Extension{
 
