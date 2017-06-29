@@ -22,6 +22,7 @@
 		}
 	},
 	"replace": {
-		"sheadawson/silverstripe-multisites": "self.version"
+		"sheadawson/silverstripe-multisites": "self.version",
+		"silverstripe-australia/silverstripe-multisites": "self.version"
 	}
 }
