@@ -13,5 +13,6 @@ class MultisitesVirtualPageTest extends VirtualPageTest {
 
 	public function testCanBeRoot() {
 		$this->markTestIncomplete(__FUNCTION__.' not implemented for Multisites.');
+		return;
 	}
 }
