@@ -1,5 +1,7 @@
 # SilverStripe Multisites
 
+[![Build Status](https://travis-ci.org/symbiote/silverstripe-multisites.svg?branch=master)](https://travis-ci.org/symbiote/silverstripe-multisites)
+
 ## Overview
 
 Allows for multiple websites to be managed through a single site tree. 
