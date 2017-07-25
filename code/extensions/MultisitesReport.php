@@ -6,14 +6,14 @@
  * @package multisites
  * @author shea@symbiote.com.au
  **/
-class MultisitesReport extends Extension{
+class MultisitesReport extends Extension {
 
 	public function updateCMSFields(FieldList $fields){
 		$gfc = $fields->fieldByName('Report')->getConfig();
 		$columns = $this->owner->columns();
 		$exportColumns = array();
 		foreach ($columns as $k => $v) {
-			$exportColumns[$k] = $v['title'];
+			$exportColumns[$k] = is_array($v) ? $v['title'] : $v;
 		}
 		$gfc->getComponentByType('GridFieldExportButton')->setExportColumns($exportColumns);
 	}
