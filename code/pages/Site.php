@@ -204,7 +204,6 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		$site = Site::create();
 		$site->Title = _t('Multisites.DEFAULTSITE', 'Default Site');
 		$site->IsDefault = true;
-		$site->FolderID = Folder::find_or_make('default-site')->ID;
 		$site->write();
 		$site->publish('Stage', 'Live');
 
