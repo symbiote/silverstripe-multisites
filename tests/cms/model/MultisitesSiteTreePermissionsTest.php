@@ -14,19 +14,23 @@ class MultisitesSiteTreePermissionsTest extends SiteTreePermissionsTest {
 	}
 	
 	
-	public function testAccessingStageWithBlankStage() {
+	public function testAccessingStageWithBlankStage() 
+	{
 		$this->markTestIncomplete(__FUNCTION__.' not implemented for Multisites.');
 	}
 	
-	public function testRestrictedViewLoggedInUsers() {
+	public function testRestrictedViewLoggedInUsers() 
+	{
 		$this->markTestIncomplete(__FUNCTION__.' not implemented for Multisites.');
 	}
 	
-	public function testRestrictedViewOnlyTheseUsers() {
+	public function testRestrictedViewOnlyTheseUsers() 
+	{
 		$this->markTestIncomplete(__FUNCTION__.' not implemented for Multisites.');
 	}
 
-	public function testRestrictedViewInheritance() {
+	public function testRestrictedViewInheritance() 
+	{
 		$this->markTestIncomplete(__FUNCTION__.' not implemented for Multisites.');
 	}
 }
