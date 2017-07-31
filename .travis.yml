@@ -41,6 +41,7 @@ script:
  - rm cms/tests/controller/ContentControllerPermissionsTest.php
  - rm cms/tests/model/FileLinkTrackingTest.php
  - rm cms/tests/model/SiteTreeBrokenLinksTest.php
+ - rm cms/tests/reports/CmsReportsTest.php
  # VirtualPage related tests fail for unknown reasons during VirtualPageTest::setUp(). 
  # Ignoring it.
  - rm cms/tests/model/VirtualPageTest.php
