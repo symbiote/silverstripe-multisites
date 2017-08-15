@@ -18,7 +18,7 @@
 	"extra": {
 		"installer-name": "multisites",
 		"branch-alias": {
-			"dev-master": "4.0.x-dev"
+			"dev-master": "4.1.x-dev"
 		}
 	},
 	"replace": {

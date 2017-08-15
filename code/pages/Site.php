@@ -320,4 +320,13 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		);
 	}
 
+	/**
+	 *	This corrects an issue when duplicating a site, since the parent comes back as a false object.
+	 */
+
+	public function Parent() {
+
+		return null;
+	}
+
 }

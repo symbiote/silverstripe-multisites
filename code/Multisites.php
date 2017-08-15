@@ -68,6 +68,14 @@ class Multisites {
 	 * Builds a map of hostnames to sites, and writes it to the cache.
 	 */
 	public function build() {
+
+		/**
+		 *	After duplicating a site, the duplicate contains the same host and causes a 404 during resolution.
+		 *	IMPORTANT, this is required to prevent the site from going down.
+		 */
+
+		Versioned::reading_stage('Live');
+
 		$this->map = array(
 			'default' => null,
 			'hosts'   => array()
@@ -101,6 +109,10 @@ class Multisites {
 		}
 
 		$this->cache->save($this->map, self::CACHE_KEY);
+
+		// Change the stage back now.
+
+		Versioned::reading_stage('Stage');
 	}
 
 	/**
