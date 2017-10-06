@@ -287,6 +287,9 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	 **/
 	public function getSiteTheme(){
 		$theme = $this->Theme;
+		if (!$theme) {
+			$theme = Config::inst()->get('SSViewer', 'theme');
+		}
 		$this->extend('updateGetSiteTheme', $theme);
 		return $theme;
 	}

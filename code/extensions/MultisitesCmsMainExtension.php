@@ -37,6 +37,9 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 			}
 			
 			if(file_exists(BASE_PATH . '/' . $cssFile)){
+				// NOTE: This ensures editor.css is invalided properly when it's updated.
+				$cssFile = $cssFile.'?m='.filemtime(BASE_PATH.'/'.$cssFile);
+				
 				$htmlEditorConfig->setOption('content_css', $cssFile);
 				
 				if($this->owner->getRequest()->isAjax() && $this->owner->class == 'CMSPageEditController'){
