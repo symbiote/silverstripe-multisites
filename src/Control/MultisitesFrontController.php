@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Control;
+
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPResponse;

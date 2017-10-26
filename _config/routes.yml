@@ -1,5 +1,5 @@
 ---
-Name: modelascontrollerroutes
+Name: multisitesmodelascontrollerroutes
 Before: framework/routes#coreroutes
 After: cms/routes#modelascontrollerroutes
 ---

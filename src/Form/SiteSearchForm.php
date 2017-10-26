@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Form;
+
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DB;

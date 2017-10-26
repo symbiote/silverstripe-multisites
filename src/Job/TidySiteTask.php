@@ -1,144 +1,141 @@
 <?php
 
+namespace Symbiote\Multisites\Job;
+
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\ORM\DB;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\BuildTask;
 
 /**
- *	This task is designed to smooth out data integrity edge cases when duplicating a site object and children.
- *	PLEASE NOTE, it's also handy to just clean up a site object and children (in a non-destructive manner).
- *	@author Nathan Glasl <nathan@symbiote.com.au>
+ * 	This task is designed to smooth out data integrity edge cases when duplicating a site object and children.
+ * 	PLEASE NOTE, it's also handy to just clean up a site object and children (in a non-destructive manner).
+ * 	@author Nathan Glasl <nathan@symbiote.com.au>
  */
+class TidySiteTask extends BuildTask
+{
+    private static $segment = 'TidySiteTask';
+    
+    protected $description = "This task is designed to smooth out data integrity edge cases when duplicating a site object and children. PLEASE NOTE, it's also handy to just clean up a site object and children (in a non-destructive manner).";
+    protected $siteID;
+    protected $count = 0;
+    // This is so something (events for example) can be purged.
 
-class TidySiteTask extends BuildTask {
+    protected $purge;
+    protected $purged = 0;
 
-	protected $description = "This task is designed to smooth out data integrity edge cases when duplicating a site object and children. PLEASE NOTE, it's also handy to just clean up a site object and children (in a non-destructive manner).";
+    public function run($request)
+    {
 
-	protected $siteID;
+        $this->siteID = $request->getVar('siteID');
+        $purge        = $request->getVar('purge');
+        if (class_exists($purge)) {
+            $this->purge = $purge;
+        }
+        if ($this->siteID) {
 
-	protected $count = 0;
+            // To begin, clean up the draft pages.
 
-	// This is so something (events for example) can be purged.
+            Versioned::reading_stage('Stage');
+            $site = Site::get()->byID($this->siteID);
+            if ($site) {
+                $this->recursiveTidy($site->AllChildren());
+            }
 
-	protected $purge;
+            // Then, clean up the published pages (separately to prevent issues).
 
-	protected $purged = 0;
+            Versioned::reading_stage('Live');
+            $site = Site::get()->byID($this->siteID);
+            if ($site) {
+                $this->recursiveTidy($site->AllChildren());
+            }
 
-	public function run($request) {
+            // Success!
 
-		$this->siteID = $request->getVar('siteID');
-		$purge = $request->getVar('purge');
-		if(class_exists($purge)) {
-			$this->purge = $purge;
-		}
-		if($this->siteID) {
+            DB::alteration_message('Done!');
+            DB::alteration_message("`<strong>{$this->count}</strong>` Page/s Fixed.");
+            DB::alteration_message("`<strong>{$this->purged}</strong>` Purged.");
+        } else {
+            DB::alteration_message('Please supply a `<strong>siteID</strong>`.');
+        }
+    }
 
-			// To begin, clean up the draft pages.
+    /**
+     * 	This recursively goes through children to ensure everything is tidy.
+     */
+    public function recursiveTidy($children)
+    {
 
-			Versioned::reading_stage('Stage');
-			$site = Site::get()->byID($this->siteID);
-			if($site) {
-				$this->recursiveTidy($site->AllChildren());
-			}
+        foreach ($children as $page) {
+            $write = false;
 
-			// Then, clean up the published pages (separately to prevent issues).
+            // This is so something (events for example) can be purged.
 
-			Versioned::reading_stage('Live');
-			$site = Site::get()->byID($this->siteID);
-			if($site) {
-				$this->recursiveTidy($site->AllChildren());
-			}
+            if ($this->purge && is_a($page, $this->purge, true)) {
+                $page->delete();
+                $this->purged++;
+                continue;
+            }
 
-			// Success!
+            // The most common issue is that the site ID doesn't match.
 
-			DB::alteration_message('Done!');
-			DB::alteration_message("`<strong>{$this->count}</strong>` Page/s Fixed.");
-			DB::alteration_message("`<strong>{$this->purged}</strong>` Purged.");
-		}
-		else {
-			DB::alteration_message('Please supply a `<strong>siteID</strong>`.');
-		}
-	}
+            if ($page->SiteID != $this->siteID) {
 
-	/**
-	 *	This recursively goes through children to ensure everything is tidy.
-	 */
+                // Update it to match.
 
-	public function recursiveTidy($children) {
+                $page->SiteID = $this->siteID;
+                $write        = true;
+            }
 
-		foreach($children as $page) {
-			$write = false;
+            // The next issue is that duplicated URL segments have numbers appended (`URL-segment-2` for example).
 
-			// This is so something (events for example) can be purged.
+            if (preg_match('%-[0-9]$%', $page->URLSegment)) {
 
-			if($this->purge && is_a($page, $this->purge, true)) {
-				$page->delete();
-				$this->purged++;
-				continue;
-			}
+                // When a page title ends with a number, the URL should match this.
 
-			// The most common issue is that the site ID doesn't match.
+                $last = substr($page->Title, -1);
+                if (is_numeric($last)) {
 
-			if($page->SiteID != $this->siteID) {
+                    // Determine whether this actually needs fixing.
 
-				// Update it to match.
+                    if ($last !== substr($page->URLSegment, -1)) {
 
-				$page->SiteID = $this->siteID;
-				$write = true;
-			}
+                        // Update it to match.
 
-			// The next issue is that duplicated URL segments have numbers appended (`URL-segment-2` for example).
+                        $page->URLSegment = $page->Title;
+                        $write            = true;
+                    }
+                }
 
-			if(preg_match('%-[0-9]$%', $page->URLSegment)) {
+                // The number appended shouldn't exist.
+                else {
 
-				// When a page title ends with a number, the URL should match this.
+                    // Determine whether this is considered unique (otherwise it can't be updated).
 
-				$last = substr($page->Title, -1);
-				if(is_numeric($last)) {
+                    $to = substr($page->URLSegment, 0, -2);
+                    if (!SiteTree::get()->filter(array(
+                            'ParentID' => $page->ParentID,
+                            'URLSegment' => $to
+                        ))->exists()) {
 
-					// Determine whether this actually needs fixing.
+                        // This isn't unique, so update it.
 
-					if($last !== substr($page->URLSegment, -1)) {
+                        $page->URLSegment = $to;
+                        $write            = true;
+                    }
+                }
+            }
 
-						// Update it to match.
+            // Determine whether this page needs a write.
 
-						$page->URLSegment = $page->Title;
-						$write = true;
-					}
-				}
+            if ($write) {
+                $page->write();
+                $this->count++;
+            }
 
-				// The number appended shouldn't exist.
+            // Where necessary, continue further down.
 
-				else {
-
-					// Determine whether this is considered unique (otherwise it can't be updated).
-
-					$to = substr($page->URLSegment, 0, -2);
-					if(!SiteTree::get()->filter(array(
-						'ParentID' => $page->ParentID,
-						'URLSegment' => $to
-					))->exists()) {
-
-						// This isn't unique, so update it.
-
-						$page->URLSegment = $to;
-						$write = true;
-					}
-				}
-			}
-
-			// Determine whether this page needs a write.
-
-			if($write) {
-				$page->write();
-				$this->count++;
-			}
-
-			// Where necessary, continue further down.
-
-			$this->recursiveTidy($page->AllChildren());
-		}
-	}
-
+            $this->recursiveTidy($page->AllChildren());
+        }
+    }
 }

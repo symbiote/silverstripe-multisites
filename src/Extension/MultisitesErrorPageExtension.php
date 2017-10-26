@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Extension;
+
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\CMS\Model\SiteTreeExtension;
 /**

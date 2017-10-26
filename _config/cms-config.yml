@@ -1,0 +1,20 @@
+---
+Name: cms_assets_config
+---
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'symbiote/silverstripe-multisites: javascript/MultisitesAdmin.js'
+  extra_requirements_css:
+    - 'symbiote/silverstripe-multisites: css/MultisitesAdmin.css'
+    
+---
+Name: cms_report_config
+---
+SilverStripe\Reports\Report:
+  excluded_reports: 
+    - SilverStripe\CMS\Reports\EmptyPagesReport
+    - SilverStripe\CMS\Reports\RecentlyEditedReport
+    - SilverStripe\CMS\Reports\BrokenLinksReport
+    - SilverStripe\CMS\Reports\BrokenFilesReport
+    - SilverStripe\CMS\Reports\BrokenVirtualPagesReport
+    - SilverStripe\CMS\Reports\BrokenRedirectorPagesReport

@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Extension;
+
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\CMS\Model\SiteTreeExtension;

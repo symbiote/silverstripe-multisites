@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Extension;
+
 use SilverStripe\Control\Session;
 use SilverStripe\ORM\DataExtension;
 class MultisitesMemberExtension extends DataExtension {

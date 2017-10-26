@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Admin;
+
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\DropdownField;
@@ -146,7 +148,7 @@ class MultisitesModelAdminExtension extends Extension {
 	 * @return string
 	 **/
 	public function getActiveSiteSessionKey() {
-		return 'Multisites_ActiveSite_For_' . $this->owner::class;
+		return 'Multisites_ActiveSite_For_' . get_class($this->owner);
 	}
 
 

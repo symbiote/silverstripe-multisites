@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Control;
+
 use SilverStripe\Control\Controller;
 /**
  * Controller for displaying the robots.txt file for a multisites enabled site.

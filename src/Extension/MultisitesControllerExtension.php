@@ -1,5 +1,9 @@
 <?php
 
+namespace Symbiote\Multisites\Extension;
+
+use Symbiote\Multisites\Multisites;
+
 use SilverStripe\ORM\DatabaseAdmin;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\DevelopmentAdmin;

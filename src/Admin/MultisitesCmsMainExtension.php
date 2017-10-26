@@ -1,4 +1,5 @@
 <?php
+namespace Symbiote\Multisites\Admin;
 
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Controllers\CMSMain;

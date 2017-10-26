@@ -1,4 +1,5 @@
 <?php
+namespace Symbiote\Multisites\Admin;
 
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\CMS\Model\SiteTree;

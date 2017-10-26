@@ -3,34 +3,34 @@ Name: extensions
 ---
 SilverStripe\CMS\Controllers\CMSMain:
   extensions:
-    - MultisitesCMSMainExtension
+    - Symbiote\Multisites\Extension\MultisitesCMSMainExtension
 SilverStripe\Control\Controller:
   extensions:
-    - MultisitesControllerExtension
+    - Symbiote\Multisites\Extension\MultisitesControllerExtension
 SilverStripe\CMS\Controllers\ContentController:
   extensions:
-    - MultisitesContentControllerExtension
+    - Symbiote\Multisites\Extension\MultisitesContentControllerExtension
 SilverStripe\ErrorPage\ErrorPage:
   extensions:
-    - MultisitesErrorPageExtension
+    - Symbiote\Multisites\Extension\MultisitesErrorPageExtension
 SilverStripe\Security\Member:
   extensions:
-    - MultisitesMemberExtension
+    - Symbiote\Multisites\Extension\MultisitesMemberExtension
 SilverStripe\Admin\ModelAdmin:
   extensions:
-    - MultisitesModelAdminExtension
+    - Symbiote\Multisites\Extension\MultisitesModelAdminExtension
 SilverStripe\Security\Security:
   extensions:
-    - MultisitesSecurityExtension
+    - Symbiote\Multisites\Extension\MultisitesSecurityExtension
 SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - MultisitesSiteConfigExtension
+    - Symbiote\Multisites\Extension\MultisitesSiteConfigExtension
 SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - MultisitesSiteTreeExtension
+    - Symbiote\Multisites\Extension\MultisitesSiteTreeExtension
 SilverStripe\Reports\Report:
   extensions:
-    - MultisitesReport
+    - Symbiote\Multisites\Extension\MultisitesReport
 ---
 Name: extensions_test
 Only:

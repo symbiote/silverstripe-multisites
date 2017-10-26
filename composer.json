@@ -12,8 +12,8 @@
 	],
 	"require":
 	{
-		"silverstripe/cms": "~3.2",
-		"symbiote/silverstripe-multivaluefield": "~2.2"
+		"silverstripe/cms": "~4.0",
+		"symbiote/silverstripe-multivaluefield": "~5.0"
 	},
 	"extra": {
         "expose": [

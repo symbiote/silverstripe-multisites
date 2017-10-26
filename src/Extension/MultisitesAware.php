@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Extension;
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
 /**

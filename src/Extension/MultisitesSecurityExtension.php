@@ -1,5 +1,7 @@
 <?php
 
+namespace Symbiote\Multisites\Extension;
+
 use SilverStripe\View\SSViewer;
 use SilverStripe\Core\Extension;
 /**
