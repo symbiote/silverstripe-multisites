@@ -1,8 +1,7 @@
 ---
 Name: sitetree
 ---
-SiteTree:
+SilverStripe\CMS\Model\SiteTree:
   can_be_root: false
-
 Site:
   can_be_root: true

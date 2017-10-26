@@ -1,7 +1,7 @@
 {
 	"name": "symbiote/silverstripe-multisites",
 	"description": "Allows for multiple websites to be managed through a single site tree.",
-	"type": "silverstripe-module",
+	"type": "silverstripe-vendormodule",
 	"keywords": ["silverstripe", "multisites", "subsites"],
 	"homepage": "http://github.com/symbiote/silverstripe-multisites",
 	"authors": [
@@ -16,13 +16,24 @@
 		"symbiote/silverstripe-multivaluefield": "~2.2"
 	},
 	"extra": {
+        "expose": [
+            "client"
+        ],
 		"installer-name": "multisites",
 		"branch-alias": {
-			"dev-master": "4.1.x-dev"
+			"dev-master": "5.0.x-dev"
 		}
 	},
 	"replace": {
 		"sheadawson/silverstripe-multisites": "self.version",
 		"silverstripe-australia/silverstripe-multisites": "self.version"
-	}
+	},
+    "autoload": {
+        "psr-4": {
+            "Symbiote\\Multisites\\": "src/",
+            "Symbiote\\Multisites\\Tests\\": "tests/"
+        }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }

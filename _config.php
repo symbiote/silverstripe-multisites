@@ -1,4 +1,17 @@
 <?php
+
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Dev\DebugView;
+use SilverStripe\Admin\CMSMenu;
+use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\View\Requirements;
+use SilverStripe\CMS\Reports\EmptyPagesReport;
+use SilverStripe\CMS\Reports\BrokenRedirectorPagesReport;
+use SilverStripe\CMS\Reports\BrokenVirtualPagesReport;
+use SilverStripe\CMS\Reports\RecentlyEditedReport;
+use SilverStripe\CMS\Reports\BrokenLinksReport;
+use SilverStripe\CMS\Reports\BrokenFilesReport;
+use SilverStripe\Reports\Report;
 /**
  * @package silverstripe-multisites
  */
@@ -31,16 +44,16 @@ LeftAndMain::require_javascript(MULTISITES_PATH . '/javascript/MultisitesAdmin.j
 // http://open.silverstripe.org/ticket/7987
 Requirements::block(FRAMEWORK_ADMIN_DIR . '/javascript/LeftAndMain.AddForm.js');
 
-SS_Report::add_excluded_reports(array(
-    'EmptyPagesReport',
-    'BrokenRedirectorPagesReport',
-    'BrokenVirtualPagesReport',
-    'RecentlyEditedReport',
-	'SideReport_EmptyPages',
-	'BrokenLinksReport',
-	'SideReport_RecentlyEdited',
-	'SideReport_BrokenLinks',
-	'SideReport_BrokenFiles',
-	'SideReport_BrokenVirtualPages',
-	'SideReport_BrokenRedirectorPages'
+Report::add_excluded_reports(array(
+    EmptyPagesReport::class,
+    BrokenRedirectorPagesReport::class,
+    BrokenVirtualPagesReport::class,
+    RecentlyEditedReport::class,
+	EmptyPagesReport::class,
+	BrokenLinksReport::class,
+	RecentlyEditedReport::class,
+	BrokenLinksReport::class,
+	BrokenFilesReport::class,
+	BrokenVirtualPagesReport::class,
+	BrokenRedirectorPagesReport::class
 ));

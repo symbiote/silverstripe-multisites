@@ -1,34 +1,34 @@
 ---
 Name: extensions
 ---
-CMSMain:
+SilverStripe\CMS\Controllers\CMSMain:
   extensions:
-    ['MultisitesCMSMainExtension']
-Controller:
+    - MultisitesCMSMainExtension
+SilverStripe\Control\Controller:
   extensions:
-    ['MultisitesControllerExtension']
-ContentController:
+    - MultisitesControllerExtension
+SilverStripe\CMS\Controllers\ContentController:
   extensions:
-    ['MultisitesContentControllerExtension']
-ErrorPage:
+    - MultisitesContentControllerExtension
+SilverStripe\ErrorPage\ErrorPage:
   extensions:
-    ['MultisitesErrorPageExtension']
-Member:
+    - MultisitesErrorPageExtension
+SilverStripe\Security\Member:
   extensions:
-    ['MultisitesMemberExtension']
-ModelAdmin:
+    - MultisitesMemberExtension
+SilverStripe\Admin\ModelAdmin:
   extensions:
-    ['MultisitesModelAdminExtension']
-Security:
+    - MultisitesModelAdminExtension
+SilverStripe\Security\Security:
   extensions:
-    ['MultisitesSecurityExtension']
-SiteConfig:
+    - MultisitesSecurityExtension
+SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    ['MultisitesSiteConfigExtension']
-SiteTree:
+    - MultisitesSiteConfigExtension
+SilverStripe\CMS\Model\SiteTree:
   extensions:
-    ['MultisitesSiteTreeExtension']
-SS_Report:
+    - MultisitesSiteTreeExtension
+SilverStripe\Reports\Report:
   extensions:
     - MultisitesReport
 ---
@@ -36,6 +36,6 @@ Name: extensions_test
 Only:
   constantdefined: 'PHPUnit_MAIN_METHOD'
 ---
-SiteTree:
+SilverStripe\CMS\Model\SiteTree:
   extensions:
-    ['MultisitesSiteTreeTestExtension']
+    - MultisitesSiteTreeTestExtension

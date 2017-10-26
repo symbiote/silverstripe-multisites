@@ -3,9 +3,8 @@ Name: modelascontrollerroutes
 Before: framework/routes#coreroutes
 After: cms/routes#modelascontrollerroutes
 ---
-Director:
+SilverStripe\Control\Director:
   rules:
     '': MultisitesRootController
-    'robots.txt': 'RobotsTxtController'
-    '$URLSegment//$Action/$ID/$OtherID': MultisitesFrontController
-
+    robots.txt: RobotsTxtController
+    $URLSegment//$Action/$ID/$OtherID: MultisitesFrontController
