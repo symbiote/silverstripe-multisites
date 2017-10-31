@@ -12,22 +12,11 @@ use SilverStripe\CMS\Model\SiteTreeExtension;
  */
 class MultisitesErrorPageExtension extends SiteTreeExtension
 {
-
-    public function alternateFilepathForErrorcode($code, $locale)
-    {
-        $path  = ErrorPage::get_static_filepath();
-        $parts = array();
+    public function updateErrorFilename(&$name, $statusCode) {
+        $insert = '';
 
         if ($site = Multisites::inst()->getActiveSite()) {
-            $parts[] = $site->Host;
+            $name = str_replace('error-', 'error-' . $site->Host . '-', $name);
         }
-
-        $parts[] = $code;
-
-        if ($locale && $this->owner->hasExtension('Translatable') && $locale != Translatable::default_locale()) {
-            $parts[] = $locale;
-        }
-
-        return sprintf("%s/error-%s.html", $path, implode('-', $parts));
     }
 }
