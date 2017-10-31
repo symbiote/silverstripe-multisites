@@ -1,6 +1,8 @@
 <?php
 namespace Symbiote\Multisites\Admin;
 
+use Symbiote\Multisites\Multisites;
+
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\TreeDropdownField;
@@ -13,6 +15,9 @@ use SilverStripe\CMS\Controllers\CMSPageAddController;
  * @package silverstripe-multisites
  */
 class MultisitesCMSPageAddController extends CMSPageAddController {
+
+    private static $menu_title = 'Add Site';
+
 
 	private static $allowed_actions = array(
 		'AddForm'

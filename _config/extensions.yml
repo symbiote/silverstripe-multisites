@@ -3,7 +3,7 @@ Name: extensions
 ---
 SilverStripe\CMS\Controllers\CMSMain:
   extensions:
-    - Symbiote\Multisites\Extension\MultisitesCMSMainExtension
+    - Symbiote\Multisites\Admin\MultisitesCMSMainExtension
 SilverStripe\Control\Controller:
   extensions:
     - Symbiote\Multisites\Extension\MultisitesControllerExtension
@@ -18,7 +18,7 @@ SilverStripe\Security\Member:
     - Symbiote\Multisites\Extension\MultisitesMemberExtension
 SilverStripe\Admin\ModelAdmin:
   extensions:
-    - Symbiote\Multisites\Extension\MultisitesModelAdminExtension
+    - Symbiote\Multisites\Admin\MultisitesModelAdminExtension
 SilverStripe\Security\Security:
   extensions:
     - Symbiote\Multisites\Extension\MultisitesSecurityExtension

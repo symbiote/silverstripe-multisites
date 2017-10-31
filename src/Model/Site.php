@@ -1,5 +1,9 @@
 <?php
 
+use Symbiote\Multisites\Multisites;
+
+use Symbiote\MultiValueField\Fields\MultiValueTextField;
+
 use SilverStripe\Assets\Folder;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms\DropdownField;
@@ -76,7 +80,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
 	public function getCMSFields() {
 		$conf = SiteConfig::current_site_config();
-		$themes = $conf->getAvailableThemes();
+		$themes = SSViewer::get_themes(); //$conf->getAvailableThemes();
 
 		$theme = new DropdownField('Theme', _t('Multisites.THEME', 'Theme'), $themes);
 		$theme->setEmptyString(_t('Multisites.DEFAULTTHEME', '(Default theme)'));
@@ -90,7 +94,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			new HeaderField('SiteURLHeader', _t('Multisites.SITEURL', 'Site URL')),
 			new OptionsetField('Scheme', _t('Multisites.SCHEME', 'Scheme'), array(
 				'any'   => _t('Multisites.ANY', 'Any'),
-				'http'  => _t('Multisites.HTTP', HTTP::class),
+				'http'  => _t('Multisites.HTTP', 'HTTP'),
 				'https' => _t('Multisites.HTTPS', 'HTTPS (HTTP Secure)')
 			)),
 			new TextField('Host', _t('Multisites.HOST', 'Host')),

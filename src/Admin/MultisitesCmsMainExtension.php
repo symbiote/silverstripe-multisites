@@ -1,6 +1,8 @@
 <?php
 namespace Symbiote\Multisites\Admin;
 
+use Symbiote\Multisites\Multisites;
+
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
@@ -10,6 +12,7 @@ use SilverStripe\Forms\Form;
 use SilverStripe\CMS\Controllers\SilverStripeNavigator;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Admin\LeftAndMainExtension;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
 /**
  * @package silverstripe-multisites
  */
@@ -115,7 +118,7 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		$cms = $this->owner;
 		$req = $cms->getRequest();
 
-		$sites = Site::get()->sort(array(
+		$sites = \Site::get()->sort(array(
 			'IsDefault' => 'DESC',
 			'Title'     => 'ASC'
 		));

@@ -2,6 +2,8 @@
 
 namespace Symbiote\Multisites\Extension;
 
+use Symbiote\Multisites\Control\MultisitesRootController;
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Control\Director;
 use SilverStripe\CMS\Model\SiteTree;
