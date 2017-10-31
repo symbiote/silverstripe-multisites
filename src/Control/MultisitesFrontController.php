@@ -2,6 +2,7 @@
 
 namespace Symbiote\Multisites\Control;
 
+use Symbiote\Multisites\Multisites;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPResponse;
@@ -26,8 +27,6 @@ class MultisitesFrontController extends ModelAsController {
 		if(!$site) {
 			return $this->httpError(404);
 		}
-
-		if(class_exists('Translatable')) Translatable::disable_locale_filter();
 
 		$page = SiteTree::get()->filter(array(
 			'ParentID'   => $site,
