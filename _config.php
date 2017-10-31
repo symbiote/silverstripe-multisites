@@ -1,6 +1,6 @@
 <?php
 
+use Symbiote\Multisites\Admin\MultisitesCMSPageAddController;
 use SilverStripe\Admin\CMSMenu;
 
-CMSMenu::remove_menu_item('MultisitesCMSSiteAddController');
-CMSMenu::remove_menu_item('MultisitesCMSPageAddController');
+CMSMenu::remove_menu_class(MultisitesCMSPageAddController::class);

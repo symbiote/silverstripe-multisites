@@ -1,6 +1,7 @@
 ---
 Name: multisitesmodelascontrollerroutes
-After: '*'
+After: 
+  - modelascontrollerroutes
 ---
 SilverStripe\Control\Director:
   rules:
