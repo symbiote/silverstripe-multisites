@@ -1,11 +1,11 @@
----
-Name: cms_assets_config
----
-SilverStripe\Admin\LeftAndMain:
-  extra_requirements_javascript:
-    - 'symbiote/silverstripe-multisites: javascript/MultisitesAdmin.js'
-  extra_requirements_css:
-    - 'symbiote/silverstripe-multisites: css/MultisitesAdmin.css'
+#---
+#Name: cms_assets_config
+#---
+#SilverStripe\Admin\LeftAndMain:
+#  extra_requirements_javascript:
+#    - 'symbiote/silverstripe-multisites: javascript/MultisitesAdmin.js'
+#  extra_requirements_css:
+#    - 'symbiote/silverstripe-multisites: css/MultisitesAdmin.css'
     
 ---
 Name: cms_report_config
@@ -18,3 +18,14 @@ SilverStripe\Reports\Report:
     - SilverStripe\CMS\Reports\BrokenFilesReport
     - SilverStripe\CMS\Reports\BrokenVirtualPagesReport
     - SilverStripe\CMS\Reports\BrokenRedirectorPagesReport
+    
+---
+Name: multsitescache
+After:
+  - '#corecache'
+---
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.multisites:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "multisites"

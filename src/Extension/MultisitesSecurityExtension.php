@@ -16,7 +16,7 @@ class MultisitesSecurityExtension extends Extension{
 		$site = Multisites::inst()->getCurrentSite();
 
 		if($site && $site->Theme) {
-			SSViewer::set_theme($site->Theme);
+			SSViewer::set_themes([$site->Theme, SSViewer::DEFAULT_THEME]);
 		}
 	}
 }

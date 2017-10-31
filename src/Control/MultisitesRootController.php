@@ -1,6 +1,9 @@
 <?php
 namespace Symbiote\Multisites\Control;
 
+use Symbiote\Multisites\Multisites;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\ORM\DB;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
@@ -10,38 +13,49 @@ use SilverStripe\CMS\Controllers\RootURLController;
  */
 class MultisitesRootController extends RootURLController {
 
-	public function handleRequest(HTTPRequest $request, DataModel $model = null) {
+	public function handleRequest(HTTPRequest $request) {
 		self::$is_at_root = true;
+        $this->beforeHandleRequest($request);
 
-		$this->setDataModel($model);
-		$this->pushCurrent();
-		$this->init();
 
-		if(!$site = Multisites::inst()->getCurrentSiteId()) {
-			return $this->httpError(404);
-		}
+        if (!$this->getResponse()->isFinished()) {
+            if(!$site = Multisites::inst()->getCurrentSiteId()) {
+                return $this->httpError(404);
+            }
 
-		$page = SiteTree::get()->filter(array(
-			'ParentID'   => $site,
-			'URLSegment' => 'home'
-		));
+            $page = SiteTree::get()->filter(array(
+                'ParentID'   => $site,
+                'URLSegment' => 'home'
+            ));
 
-		if(!$page = $page->first()) {
-			return $this->httpError(404);
-		}
+            if(!$page = $page->first()) {
+                return $this->httpError(404);
+            }
 
-		$request = new HTTPRequest(
-			$request->httpMethod(),
-			$page->RelativeLink(),
-			$request->getVars(),
-			$request->postVars()
-		);
-		$request->match('$URLSegment//$Action', true);
+            $pageRequest = new HTTPRequest(
+                $request->httpMethod(),
+                $page->RelativeLink(),
+                $request->getVars(),
+                $request->postVars()
+            );
 
-		$front    = new MultisitesFrontController();
-		$response = $front->handleRequest($request, $model);
+            $pageRequest->setSession($request->getSession());
+            $pageRequest->match('$URLSegment//$Action', true);
 
-		$this->popCurrent();
+            $front    = new MultisitesFrontController();
+            $response = $front->handleRequest($pageRequest);
+
+            $this->prepareResponse($response);
+        }
+
+        $this->afterHandleRequest();
+
+        return $this->getResponse();
+
+		
+
+		
+
 		return $response;
 	}
 	

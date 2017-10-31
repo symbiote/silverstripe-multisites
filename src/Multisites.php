@@ -2,6 +2,8 @@
 
 namespace Symbiote\Multisites;
 
+use Site;
+
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Controller;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
@@ -11,6 +13,10 @@ use SilverStripe\Forms\FileField;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Control\HTTPRequest;
+
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Contains various multisites utility functions, should be accessed via the
@@ -34,9 +40,29 @@ class Multisites
      * @var Array - A list of features to be used on a given Site, identified by developer_identifiers
      */
     private static $site_features;
+
+    /**
+     *
+     * @var Psr\SimpleCache\CacheInterface
+     */
     protected $cache;
+
+    /**
+     *
+     * @var array
+     */
     protected $map;
+
+    /**
+     *
+     * @var mixed
+     */
     protected $default;
+
+    /**
+     *
+     * @var type Site
+     */
     protected $current;
 
     /**
@@ -54,9 +80,7 @@ class Multisites
 
     public function __construct()
     {
-        $this->cache = SS_Cache::factory('Multisites', 'Core', array(
-                'automatic_serialization' => true
-        ));
+        $this->cache =  Injector::inst()->get(CacheInterface::class . '.multisites');
     }
 
     /**
@@ -65,8 +89,13 @@ class Multisites
      */
     public function init()
     {
-        $cached = $this->cache->load(self::CACHE_KEY);
-        $valid  = $cached && isset($cached['hosts']) && count($cached['hosts']);
+        $valid = null;
+        
+        if ($this->cache->has(self::CACHE_KEY)) {
+            $cached = $this->cache->get(self::CACHE_KEY);
+            $valid  = $cached && isset($cached['hosts']) && count($cached['hosts']);
+        }
+        
 
         if ($valid) {
             $this->map = $cached;
@@ -84,7 +113,13 @@ class Multisites
             'default' => null,
             'hosts' => array()
         );
-        $sites     = Site::get();
+
+        
+        if (!\SilverStripe\ORM\DB::get_schema()->hasTable('Site')) {
+            return;
+        }
+
+        $sites     = \Site::get();
 
         /**
          * 	After duplicating a site, the duplicate contains the same host and causes a 404 during resolution.
@@ -119,7 +154,7 @@ class Multisites
             }
         }
 
-        $this->cache->save($this->map, self::CACHE_KEY);
+        $this->cache->set(self::CACHE_KEY, $this->map);
     }
 
     /**
@@ -239,7 +274,7 @@ class Multisites
             }
         }
 
-        if ($id = Session::get('Multisites_ActiveSite')) {
+        if ($id = $controller->getRequest()->getSession()->get('Multisites_ActiveSite')) {
             return Site::get()->byID($id);
         }
 
@@ -253,8 +288,8 @@ class Multisites
     public function setActiveSite($site)
     {
         $id = is_numeric($site) ? $site : $site->ID;
-        Session::set('Multisites_ActiveSite', $id);
-        Session::set('MultisitesModelAdmin_SiteID', $id); // legacy
+        $this->getSession()->set('Multisites_ActiveSite', $id);
+        $this->getSession()->set('MultisitesModelAdmin_SiteID', $id); // legacy
     }
 
     /**
@@ -305,5 +340,21 @@ class Multisites
         $inCall = true;
         singleton('Site')->requireDefaultRecords();
         $inCall = false;
+    }
+
+    /**
+     *
+     * @return HTTPRequest
+     */
+    protected function getSession() {
+        if (!Injector::inst()->has(HTTPRequest::class)) {
+            return null;
+        }
+        
+        $request = Injector::inst()->get(HTTPRequest::class);
+        /* @var HTTPRequest $request */
+        
+        // Skip if the session hasn't been started
+        return $request->getSession();
     }
 }

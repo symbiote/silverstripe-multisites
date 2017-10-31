@@ -5,7 +5,6 @@ namespace Symbiote\Multisites\Admin;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Control\Session;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Extension;
 /**
@@ -119,7 +118,7 @@ class MultisitesModelAdminExtension extends Extension {
 			return Multisites::inst()->getActiveSite();
 		} else {
 			if($this->modelIsMultiSitesAware()) {
-				if($active = Session::get($this->getActiveSiteSessionKey())) {
+				if($active = $this->owner->getRequest()->getSession()->get($this->getActiveSiteSessionKey())) {
 					return Site::get()->byID($active);
 				}
 			}
@@ -137,7 +136,7 @@ class MultisitesModelAdminExtension extends Extension {
 		if($this->owner->config()->use_active_site_session) {
 			Multisites::inst()->setActiveSite($siteID);
 		} else {
-			Session::set($this->getActiveSiteSessionKey(), $siteID);
+			$this->owner->getRequest()->getSession()->set($this->getActiveSiteSessionKey(), $siteID);
 		}
 	}
 
@@ -172,6 +171,6 @@ class MultisitesModelAdminExtension extends Extension {
 	 **/
 	private function modelIsMultiSitesAware() {
 		$model = $this->getListDataClass();
-		return $model->hasExtension('MultisitesAware') || $model->is_a(SiteTree::class);
+		return $model->hasExtension('MultisitesAware') || $model instanceof SiteTree;
 	}
 }

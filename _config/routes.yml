@@ -1,10 +1,11 @@
 ---
 Name: multisitesmodelascontrollerroutes
-Before: framework/routes#coreroutes
-After: cms/routes#modelascontrollerroutes
+After: 
+  - '*'
+  - 'modelascontrollerroutes'
 ---
 SilverStripe\Control\Director:
   rules:
-    '': MultisitesRootController
-    robots.txt: RobotsTxtController
-    $URLSegment//$Action/$ID/$OtherID: MultisitesFrontController
+    '': Symbiote\Multisites\Control\MultisitesRootController
+    robots.txt: Symbiote\Multisites\Control\RobotsTxtController
+    $URLSegment//$Action/$ID/$OtherID: Symbiote\Multisites\Control\MultisitesFrontController

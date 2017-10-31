@@ -4,10 +4,17 @@ namespace Symbiote\Multisites\Extension;
 
 use SilverStripe\Control\Session;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Control\HTTPRequest;
+
 class MultisitesMemberExtension extends DataExtension {
 	
 	public function memberLoggedIn(){
-		Session::clear('Multisites_ActiveSite');
-		Session::clear('MultisitesModelAdmin_SiteID'); // legacy
+        $request = Injector::inst()->get(HTTPRequest::class);
+        $session = $request->getSession();
+        if ($session) {
+            $session->clear('Multisites_ActiveSite');
+            $session->clear('MultisitesModelAdmin_SiteID'); // legacy
+        }
 	}
 }

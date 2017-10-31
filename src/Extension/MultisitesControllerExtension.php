@@ -50,17 +50,18 @@ class MultisitesControllerExtension extends Extension {
 			return;
 		}
 
-		$theme = $site->getSiteTheme();
-		if ($theme) {
-			SSViewer::set_theme($theme);
-		}
-
+        // are we on the frontend?
+        if (!$this->owner instanceof \SilverStripe\Admin\LeftAndMain) {
+            $theme = $site->getSiteTheme();
+            if ($theme) {
+                SSViewer::set_themes([$theme, SSViewer::DEFAULT_THEME]);
+            }
+        }
+		
 		// Update default uploads folder to site
 		$folder = $site->Folder();
 		if ($folder->exists()) {
-			$assetPos = strpos($folder->getRelativePath(), ASSETS_DIR) + strlen(ASSETS_DIR);
-			$siteAssetDir = trim(substr($folder->getRelativePath(), $assetPos), '/');
-			Config::inst()->update(Upload::class, 'uploads_folder', $siteAssetDir);
+			Config::modify()->set(Upload::class, 'uploads_folder', $folder->Name);
 		}
 	}
 	
@@ -71,7 +72,7 @@ class MultisitesControllerExtension extends Extension {
 	 *	@throws SS_HTTPResponse_Exception
 	 */
 	public function onBeforeHTTPError($code, $request) {
-
+        
 		$errorPage = ErrorPage::get()->filter(array(
 			'ErrorCode' => $code,
 			'SiteID' => Multisites::inst()->getCurrentSiteId()
