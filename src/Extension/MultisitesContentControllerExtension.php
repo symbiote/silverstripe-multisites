@@ -54,7 +54,7 @@ class MultisitesContentControllerExtension extends Extension {
 	 * @return Site The current site.
 	 */
 	public function Site() {
-		return $this->owner->dataRecord->getSite();
+		return $this->owner->data()->getSite();
 	}
 
 }

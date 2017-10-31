@@ -34,8 +34,6 @@ class MultisitesFrontController extends ModelAsController {
 		));
 		$page = $page->first();
 
-		if(class_exists('Translatable')) Translatable::enable_locale_filter();
-
 		if(!$page) {
 			// Check to see if linkmapping module is installed and if so, if there a map for this request.
 			if(class_exists('LinkMapping')){
@@ -94,9 +92,6 @@ class MultisitesFrontController extends ModelAsController {
 			return $this->httpError(404);
 		}
 
-		if(class_exists('Translatable') && $page->Locale) {
-			Translatable::set_current_locale($page->Locale);
-		}
 
 		return self::controller_for($page, $request->param('Action'));
 	}
