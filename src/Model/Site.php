@@ -31,6 +31,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\HiddenClass;
 use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Forms\LiteralField;
 
 /**
  * @package silverstripe-multisites
@@ -75,15 +76,18 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		'IsDefault' => 'Is Default'
 	);
 
+    private static $available_themes = [];
 
 	private static $icon = 'multisites/images/world.png';
 
 	public function getCMSFields() {
-		$conf = SiteConfig::current_site_config();
-		$themes = SSViewer::get_themes(); //$conf->getAvailableThemes();
-
-		$theme = new DropdownField('Theme', _t('Multisites.THEME', 'Theme'), $themes);
-		$theme->setEmptyString(_t('Multisites.DEFAULTTHEME', '(Default theme)'));
+		$themes = $this->config()->available_themes;
+        if (count($themes)) {
+            $theme = new DropdownField('Theme', _t('Multisites.THEME', 'Theme'), $themes);
+            $theme->setEmptyString(_t('Multisites.DEFAULTTHEME', '(Default theme)'));
+        } else {
+            $theme = LiteralField::create('ThemeWarning', '<p class="error">No themes configured in Site.available_themes</p>');
+        }
 
 		$fields = new FieldList(new TabSet('Root', new Tab(
 			'Main',
@@ -152,7 +156,6 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function AbsoluteLink($action = null){
 		return $this->getURL() . '/';
 	}
-
 	
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
