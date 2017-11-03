@@ -3,11 +3,12 @@ namespace Symbiote\Multisites\Tests\Cms\Control;
 
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search;
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_ChangedPages;
-use SilverStripe\CMS\Tests\Controllers\CMSSiteTreeFilterTest;
+use SilverStripe\Dev\SapphireTest;
+
 /**
  * @package silverstripe-multisites
  */
-class MultisitesCMSSiteTreeFilterTest extends CMSSiteTreeFilterTest {
+class MultisitesCMSSiteTreeFilterTest extends SapphireTest {
 	/** 
 	 * Get parent class directory so it pulls the fixtures from that location instead.
 	 */

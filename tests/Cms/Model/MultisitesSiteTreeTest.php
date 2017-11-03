@@ -2,12 +2,12 @@
 namespace Symbiote\Multisites\Tests\Cms\Model;
 
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\CMS\Tests\Model\SiteTreeTest;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * @package silverstripe-multisites
  */
-class MultisitesSiteTreeTest extends SiteTreeTest {
+class MultisitesSiteTreeTest extends SapphireTest {
 	/** 
 	 * Get parent class directory so it pulls the fixtures from that location instead.
 	 */

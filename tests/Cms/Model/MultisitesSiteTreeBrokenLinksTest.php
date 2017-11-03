@@ -5,12 +5,13 @@ use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\CMS\Tests\Model\SiteTreeBrokenLinksTest;
+use SilverStripe\Dev\SapphireTest;
+
 /**
  * @package cms
  * @subpackage tests
  */
-class MultisitesSiteTreeBrokenLinksTest extends SiteTreeBrokenLinksTest {
+class MultisitesSiteTreeBrokenLinksTest extends SapphireTest {
 	protected function getCurrentAbsolutePath() 
 	{
 		$filename = self::$test_class_manifest->getItemPath(get_parent_class($this));
