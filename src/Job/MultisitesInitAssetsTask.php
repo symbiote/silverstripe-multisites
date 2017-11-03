@@ -15,9 +15,8 @@ use SilverStripe\Dev\BuildTask;
 class MultisitesInitAssetsTask extends BuildTask
 {
     private static $segment = 'MultisitesInitAssetsTask';
-
-    protected $enabled     = true;
-    protected $description = 'move assets to a folder with the name of the current multisite';
+    protected $enabled      = true;
+    protected $description  = 'move assets to a folder with the name of the current multisite';
 
     /**
      * Implement this method in the task subclass to
