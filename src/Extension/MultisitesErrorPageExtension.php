@@ -2,7 +2,7 @@
 
 namespace Symbiote\Multisites\Extension;
 
-use SilverStripe\ErrorPage\ErrorPage;
+use Symbiote\Multisites\Multisites;
 use SilverStripe\CMS\Model\SiteTreeExtension;
 
 /**
@@ -12,11 +12,11 @@ use SilverStripe\CMS\Model\SiteTreeExtension;
  */
 class MultisitesErrorPageExtension extends SiteTreeExtension
 {
-    public function updateErrorFilename(&$name, $statusCode) {
-        $insert = '';
 
+    public function updateErrorFilename(&$name, $statusCode)
+    {
         if ($site = Multisites::inst()->getActiveSite()) {
-            $name = str_replace('error-', 'error-' . $site->Host . '-', $name);
+            $name = str_replace('error-', 'error-'.$site->Host.'-', $name);
         }
     }
 }
