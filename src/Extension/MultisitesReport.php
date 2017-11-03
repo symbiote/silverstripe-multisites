@@ -2,7 +2,7 @@
 
 namespace Symbiote\Multisites\Extension;
 
-use Site;
+use Symbiote\Multisites\Model\Site;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridFieldExportButton;

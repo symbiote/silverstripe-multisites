@@ -31,11 +31,3 @@ SilverStripe\CMS\Model\SiteTree:
 SilverStripe\Reports\Report:
   extensions:
     - Symbiote\Multisites\Extension\MultisitesReport
----
-Name: extensions_test
-Only:
-  constantdefined: 'PHPUnit_MAIN_METHOD'
----
-SilverStripe\CMS\Model\SiteTree:
-  extensions:
-    - MultisitesSiteTreeTestExtension

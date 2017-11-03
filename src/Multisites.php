@@ -2,7 +2,7 @@
 
 namespace Symbiote\Multisites;
 
-use Site;
+use Symbiote\Multisites\Model\Site;
 
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Controller;
@@ -119,7 +119,7 @@ class Multisites
             return;
         }
 
-        $sites     = \Site::get();
+        $sites     = Site::get();
 
         /**
          * 	After duplicating a site, the duplicate contains the same host and causes a 404 during resolution.
@@ -322,24 +322,6 @@ class Multisites
         $sites        = $sites->filter("EditorGroups.ID:ExactMatch", $memberGroups);
 
         return $sites->column('ID');
-    }
-
-    /**
-     * Sets up the 'Site' record in-place while running 'cms/tests' and others.
-     */
-    public function setupIfInTest()
-    {
-        if (!SapphireTest::is_running_test()) {
-            return;
-        }
-        static $inCall = false;
-        if ($inCall !== false) {
-            return;
-        }
-
-        $inCall = true;
-        singleton('Site')->requireDefaultRecords();
-        $inCall = false;
     }
 
     /**

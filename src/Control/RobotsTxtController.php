@@ -2,6 +2,10 @@
 
 namespace Symbiote\Multisites\Control;
 
+use Symbiote\Multisites\Model\Site;
+
+use Symbiote\Multisites\Multisites;
+
 use SilverStripe\Control\Controller;
 /**
  * Controller for displaying the robots.txt file for a multisites enabled site.

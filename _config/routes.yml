@@ -1,4 +1,13 @@
 ---
+Name: multisitesrobotsroutes
+Before: 
+  - '*'
+---
+SilverStripe\Control\Director:
+  rules:
+    robots.txt: Symbiote\Multisites\Control\RobotsTxtController
+    
+---
 Name: multisitesmodelascontrollerroutes
 After: 
   - '*'
