@@ -1,7 +1,7 @@
 <?php
 namespace Symbiote\Multisites\Tests\Cms\Control;
 
-use SilverStripe\CMS\Tests\ContentControllerTest;
+use SilverStripe\CMS\Tests\Controllers\ContentControllerTest;
 /**
  * @package silverstripe-multisites
  */

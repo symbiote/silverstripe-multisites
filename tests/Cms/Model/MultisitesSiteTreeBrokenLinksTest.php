@@ -5,7 +5,7 @@ use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\CMS\Tests\SiteTreeBrokenLinksTest;
+use SilverStripe\CMS\Tests\Model\SiteTreeBrokenLinksTest;
 /**
  * @package cms
  * @subpackage tests

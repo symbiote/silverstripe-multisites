@@ -6,7 +6,7 @@ use SilverStripe\Admin\CMSBatchActionHandler;
 use SilverStripe\Core\Convert;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\ORM\DB;
-use SilverStripe\CMS\Tests\CMSMainTest;
+use SilverStripe\CMS\Tests\Controllers\CMSMainTest;
 /**
  * @package silverstripe-multisites
  */

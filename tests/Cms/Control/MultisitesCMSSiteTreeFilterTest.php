@@ -3,7 +3,7 @@ namespace Symbiote\Multisites\Tests\Cms\Control;
 
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search;
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_ChangedPages;
-use SilverStripe\CMS\Tests\CMSSiteTreeFilterTest;
+use SilverStripe\CMS\Tests\Controllers\CMSSiteTreeFilterTest;
 /**
  * @package silverstripe-multisites
  */

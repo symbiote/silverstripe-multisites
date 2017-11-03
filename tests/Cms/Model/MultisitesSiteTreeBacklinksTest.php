@@ -1,7 +1,7 @@
 <?php
 namespace Symbiote\Multisites\Tests\Cms\Model;
 
-use SilverStripe\CMS\Tests\SiteTreeBacklinksTest;
+use SilverStripe\CMS\Tests\Model\SiteTreeBacklinksTest;
 
 class MultisitesSiteTreeBacklinksTest extends SiteTreeBacklinksTest {
 	/**

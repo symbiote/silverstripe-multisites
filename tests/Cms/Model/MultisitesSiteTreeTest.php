@@ -2,7 +2,7 @@
 namespace Symbiote\Multisites\Tests\Cms\Model;
 
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\CMS\Tests\SiteTreeTest;
+use SilverStripe\CMS\Tests\Model\SiteTreeTest;
 
 /**
  * @package silverstripe-multisites

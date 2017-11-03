@@ -1,7 +1,7 @@
 <?php
 namespace Symbiote\Multisites\Tests\Cms\Model;
 
-use SilverStripe\CMS\Tests\FileLinkTrackingTest;
+use SilverStripe\CMS\Tests\Model\FileLinkTrackingTest;
 
 /**
  * Tests link tracking to files and images.

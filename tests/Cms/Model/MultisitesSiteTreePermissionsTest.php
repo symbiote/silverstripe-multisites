@@ -1,7 +1,7 @@
 <?php
 namespace Symbiote\Multisites\Tests\Cms\Model;
 
-use SilverStripe\CMS\Tests\SiteTreePermissionsTest;
+use SilverStripe\CMS\Tests\Model\SiteTreePermissionsTest;
 /**
  * @package silverstripe-multisites
  */

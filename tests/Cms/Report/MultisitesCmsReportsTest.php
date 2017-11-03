@@ -1,7 +1,7 @@
 <?php
 namespace Symbiote\Multisites\Tests\Cms\Report;
 
-use SilverStripe\CMS\Tests\CmsReportsTest;
+use SilverStripe\CMS\Tests\Reports\CmsReportsTest;
 /**
  * @package cms
  * @subpackage tests

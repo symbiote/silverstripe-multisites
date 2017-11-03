@@ -1,7 +1,7 @@
 <?php
 namespace Symbiote\Multisites\Tests\Cms\Control;
 
-use SilverStripe\CMS\Tests\CMSBatchActionsTest;
+use SilverStripe\CMS\Tests\Controllers\CMSBatchActionsTest;
 
 class MultisitesCMSBatchActionsTest extends CMSBatchActionsTest {
 	/** 
