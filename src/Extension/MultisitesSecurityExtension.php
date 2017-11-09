@@ -2,6 +2,8 @@
 
 namespace Symbiote\Multisites\Extension;
 
+use Symbiote\Multisites\Multisites;
+
 use SilverStripe\View\SSViewer;
 use SilverStripe\Core\Extension;
 

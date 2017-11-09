@@ -78,7 +78,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
     private static $available_themes = [];
 
-	private static $icon = 'symbiote:silverstripe-multisites multisites/images/world.png';
+	private static $icon = 'symbiote/silverstripe-multisites: client/images/world.png';
 
 	public function getCMSFields() {
 		$themes = $this->config()->available_themes;
