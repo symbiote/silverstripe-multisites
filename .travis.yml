@@ -1,8 +1,8 @@
 language: php
 
-dist: trusty
-
 env:
+  global:
+    - COMPOSER_ROOT_VERSION="4.0.x-dev"
   matrix:
     - DB=MYSQL CORE_RELEASE=4
 
@@ -15,10 +15,7 @@ matrix:
 #      env:
 #        - DB=PGSQL
     - php: 7.1
-      env:
-        - DB=MYSQL
-        - PDO=1
-        - PHPUNIT_TEST=1
+      env: DB=MYSQL PDO=1 PHPUNIT_TEST=1
 
 
 before_script:
@@ -31,4 +28,7 @@ before_script:
 
 script:
   - ls -l
+  - ls -l vendor/
+  - ls -l vendor/bin
+  - ls -l src/
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
