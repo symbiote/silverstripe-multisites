@@ -21,7 +21,7 @@ matrix:
         - PDO=1
 
 before_script:
- - phpenv rehash
+  - phpenv rehash
   - phpenv config-rm xdebug.ini
   - composer validate
   - composer require --no-update silverstripe/recipe-cms:1.0.x-dev
