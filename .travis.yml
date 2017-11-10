@@ -27,9 +27,4 @@ before_script:
   - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
 script:
-  - ls -l
-  - ls -l vendor/
-  - ls -l vendor/bin
-  - ls -lr vendor/symbiote
-  - ls -l src/
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
