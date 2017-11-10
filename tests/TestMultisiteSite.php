@@ -76,6 +76,16 @@ class TestMultisiteSite extends FunctionalTest
         $this->assertEquals('http://other.test.com/second-page/', $page->AbsoluteLink());
     }
 
+    public function testRequestSecondPage() {
+        Multisites::inst()->resetCurrentSite();
+        Multisites::inst()->build();
+
+        $_SERVER['HTTP_HOST'] = 'other.test.com';
+        $response = $this->get('second-page');
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
     protected function getTestSite($params = null)
     {
         $this->logInWithPermission('ADMIN');
