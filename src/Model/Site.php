@@ -236,7 +236,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function requireDefaultRecords() {
 		parent::requireDefaultRecords();
 
-		if(DB::query("SELECT COUNT(*) FROM \"SiteTree\" WHERE \"ClassName\" = 'Symbiote\Multisites\Model\Site'")->value() > 0) {
+		if(Site::get()->count() > 0) {
 			return;
 		}
 
