@@ -89,7 +89,7 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 	 * AddSiteForm action to add a new site
 	 **/
 	public function doAddSite() {
-		$site = $this->owner->getNewItem('new-Site-0', false);
+		$site = $this->owner->getNewItem('new-' . Site::class .'-0', false);
 		$site->write();
 
 		return $this->owner->redirect(
