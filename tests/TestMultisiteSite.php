@@ -2,7 +2,8 @@
 
 namespace Symbiote\Multisites\Tests;
 
-use Site;
+use Symbiote\Multisites\Model\Site;
+
 use Page;
 
 use Symbiote\Multisites\Multisites;

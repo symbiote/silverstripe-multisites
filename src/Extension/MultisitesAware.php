@@ -13,7 +13,7 @@ use SilverStripe\ORM\DataExtension;
 class MultisitesAware extends DataExtension
 {
     private static $has_one = array(
-        'Site' => 'Site'
+        'Site' => 'Symbiote\Multisites\Model\Site'
     );
 
     public function onBeforeWrite()

@@ -2,6 +2,7 @@
 namespace Symbiote\Multisites\Admin;
 
 use Symbiote\Multisites\Multisites;
+use Symbiote\Multisites\Model\Site;
 
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Controllers\CMSMain;
@@ -118,7 +119,7 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		$cms = $this->owner;
 		$req = $cms->getRequest();
 
-		$sites = \Site::get()->sort(array(
+		$sites = Site::get()->sort(array(
 			'IsDefault' => 'DESC',
 			'Title'     => 'ASC'
 		));

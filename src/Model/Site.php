@@ -1,15 +1,16 @@
 <?php
 
+namespace Symbiote\Multisites\Model;
+
 use Symbiote\Multisites\Multisites;
 
 use Symbiote\MultiValueField\Fields\MultiValueTextField;
 
+use Page;
 use SilverStripe\Assets\Folder;
-use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Control\HTTP;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\TextareaField;
@@ -37,6 +38,8 @@ use SilverStripe\Forms\LiteralField;
  * @package silverstripe-multisites
  */
 class Site extends Page implements HiddenClass, PermissionProvider {
+
+    private static $table_name = 'Site';
 	
 	private static $singular_name = 'Site';
 	private static $plural_name = 'Sites';
@@ -233,7 +236,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function requireDefaultRecords() {
 		parent::requireDefaultRecords();
 
-		if(DB::query("SELECT COUNT(*) FROM \"SiteTree\" WHERE \"ClassName\" = 'Site'")->value() > 0) {
+		if(DB::query("SELECT COUNT(*) FROM \"SiteTree\" WHERE \"ClassName\" = 'Symbiote\Multisites\Model\Site'")->value() > 0) {
 			return;
 		}
 

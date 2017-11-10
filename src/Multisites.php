@@ -2,7 +2,7 @@
 
 namespace Symbiote\Multisites;
 
-use Site;
+use Symbiote\Multisites\Model\Site;
 
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Controller;
@@ -119,7 +119,7 @@ class Multisites
             return;
         }
 
-        $sites     = \Site::get();
+        $sites     = Site::get();
 
         /**
          * 	After duplicating a site, the duplicate contains the same host and causes a 404 during resolution.

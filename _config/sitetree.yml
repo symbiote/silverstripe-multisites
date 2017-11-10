@@ -3,5 +3,5 @@ Name: sitetree
 ---
 SilverStripe\CMS\Model\SiteTree:
   can_be_root: false
-Site:
+Symbiote\Multisites\Model\Site:
   can_be_root: true

@@ -3,8 +3,9 @@
 namespace Symbiote\Multisites\Extension;
 
 use Symbiote\Multisites\Control\MultisitesRootController;
-use Site;
+use Symbiote\Multisites\Model\Site;
 use Symbiote\Multisites\Multisites;
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Control\Director;
 use SilverStripe\CMS\Model\SiteTree;
@@ -19,7 +20,7 @@ use SilverStripe\CMS\Model\SiteTreeExtension;
 class MultisitesSiteTreeExtension extends SiteTreeExtension
 {
     private static $has_one = array(
-        'Site' => 'Site'
+        'Site' => 'Symbiote\Multisites\Model\Site'
     );
 
     /**
