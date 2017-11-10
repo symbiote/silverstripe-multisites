@@ -15,10 +15,9 @@ use SilverStripe\Dev\BuildTask;
 class TidySiteTask extends BuildTask
 {
     private static $segment = 'TidySiteTask';
-    
     protected $description = "This task is designed to smooth out data integrity edge cases when duplicating a site object and children. PLEASE NOTE, it's also handy to just clean up a site object and children (in a non-destructive manner).";
     protected $siteID;
-    protected $count = 0;
+    protected $count       = 0;
     // This is so something (events for example) can be purged.
 
     protected $purge;

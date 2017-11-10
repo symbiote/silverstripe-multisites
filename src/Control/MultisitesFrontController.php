@@ -2,6 +2,7 @@
 
 namespace Symbiote\Multisites\Control;
 
+use Symbiote\Multisites\Multisites;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPResponse;
@@ -27,15 +28,11 @@ class MultisitesFrontController extends ModelAsController {
 			return $this->httpError(404);
 		}
 
-		if(class_exists('Translatable')) Translatable::disable_locale_filter();
-
 		$page = SiteTree::get()->filter(array(
 			'ParentID'   => $site,
 			'URLSegment' => rawurlencode($segment)
 		));
 		$page = $page->first();
-
-		if(class_exists('Translatable')) Translatable::enable_locale_filter();
 
 		if(!$page) {
 			// Check to see if linkmapping module is installed and if so, if there a map for this request.
@@ -95,9 +92,6 @@ class MultisitesFrontController extends ModelAsController {
 			return $this->httpError(404);
 		}
 
-		if(class_exists('Translatable') && $page->Locale) {
-			Translatable::set_current_locale($page->Locale);
-		}
 
 		return self::controller_for($page, $request->param('Action'));
 	}

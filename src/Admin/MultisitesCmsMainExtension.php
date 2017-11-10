@@ -1,6 +1,9 @@
 <?php
 namespace Symbiote\Multisites\Admin;
 
+use Symbiote\Multisites\Multisites;
+use Symbiote\Multisites\Model\Site;
+
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
@@ -10,6 +13,7 @@ use SilverStripe\Forms\Form;
 use SilverStripe\CMS\Controllers\SilverStripeNavigator;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Admin\LeftAndMainExtension;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
 /**
  * @package silverstripe-multisites
  */

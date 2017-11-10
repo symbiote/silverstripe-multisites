@@ -1,11 +1,16 @@
 <?php
 
+namespace Symbiote\Multisites\Model;
+
+use Symbiote\Multisites\Multisites;
+
+use Symbiote\MultiValueField\Fields\MultiValueTextField;
+
+use Page;
 use SilverStripe\Assets\Folder;
-use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Control\HTTP;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\TextareaField;
@@ -27,11 +32,14 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\HiddenClass;
 use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Forms\LiteralField;
 
 /**
  * @package silverstripe-multisites
  */
 class Site extends Page implements HiddenClass, PermissionProvider {
+
+    private static $table_name = 'Site';
 	
 	private static $singular_name = 'Site';
 	private static $plural_name = 'Sites';
@@ -71,15 +79,18 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		'IsDefault' => 'Is Default'
 	);
 
+    private static $available_themes = [];
 
-	private static $icon = 'multisites/images/world.png';
+	private static $icon = 'symbiote/silverstripe-multisites: client/images/world.png';
 
 	public function getCMSFields() {
-		$conf = SiteConfig::current_site_config();
-		$themes = $conf->getAvailableThemes();
-
-		$theme = new DropdownField('Theme', _t('Multisites.THEME', 'Theme'), $themes);
-		$theme->setEmptyString(_t('Multisites.DEFAULTTHEME', '(Default theme)'));
+		$themes = $this->config()->available_themes;
+        if (count($themes)) {
+            $theme = new DropdownField('Theme', _t('Multisites.THEME', 'Theme'), $themes);
+            $theme->setEmptyString(_t('Multisites.DEFAULTTHEME', '(Default theme)'));
+        } else {
+            $theme = LiteralField::create('ThemeWarning', '<p class="error">No themes configured in Site.available_themes</p>');
+        }
 
 		$fields = new FieldList(new TabSet('Root', new Tab(
 			'Main',
@@ -90,7 +101,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			new HeaderField('SiteURLHeader', _t('Multisites.SITEURL', 'Site URL')),
 			new OptionsetField('Scheme', _t('Multisites.SCHEME', 'Scheme'), array(
 				'any'   => _t('Multisites.ANY', 'Any'),
-				'http'  => _t('Multisites.HTTP', HTTP::class),
+				'http'  => _t('Multisites.HTTP', 'HTTP'),
 				'https' => _t('Multisites.HTTPS', 'HTTPS (HTTP Secure)')
 			)),
 			new TextField('Host', _t('Multisites.HOST', 'Host')),
@@ -148,7 +159,6 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function AbsoluteLink($action = null){
 		return $this->getURL() . '/';
 	}
-
 	
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
@@ -226,7 +236,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function requireDefaultRecords() {
 		parent::requireDefaultRecords();
 
-		if(DB::query("SELECT COUNT(*) FROM \"SiteTree\" WHERE \"ClassName\" = 'Site'")->value() > 0) {
+		if(DB::query("SELECT COUNT(*) FROM \"SiteTree\" WHERE \"ClassName\" = 'Symbiote\Multisites\Model\Site'")->value() > 0) {
 			return;
 		}
 
