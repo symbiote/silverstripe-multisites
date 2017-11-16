@@ -1,4 +1,8 @@
 
+**2017-11-16**
+
+* Stopped Multisites::getCurrentSiteId() stripping the port from the host
+
 **2017-11-10**
 
 * Updated to SilverStripe 4 compatibility

@@ -189,6 +189,9 @@ class Multisites
 
         $parts = parse_url($host);
         $host  = "{$parts['scheme']}://{$parts['host']}";
+        if (isset($parts['port'])) {
+            $host .= ":{$parts['port']}";
+        }
 
         if ($this->map) {
             if (isset($this->map['hosts'][$host])) {
