@@ -13,7 +13,7 @@
 	"require":
 	{
 		"silverstripe/cms": "~3.2",
-		"symbiote/silverstripe-multivaluefield": "~2.2"
+		"symbiote/silverstripe-multivaluefield": "~3.0"
 	},
 	"extra": {
 		"installer-name": "multisites",
