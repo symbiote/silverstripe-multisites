@@ -12,17 +12,34 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 		return _t('Multisites.SITES', 'Sites');
 	}
 
-	
 	/**
-	 * init (called from LeftAndMain extension hook)
-	 **/
+	 * @var Path to editor.css for themes. 
+	 * 
+	 * Key is the theme dir; value is the directory path beneath the theme dir if not "css" (e.g. "public/css") 
+	 */
+	private static $multisites_editor_css_dir = array();
+
+
+	/**
+	* init (called from LeftAndMain extension hook)
+	**/
 	public function init(){
 		// set the htmleditor "content_css" based on the active site
 		$htmlEditorConfig = HtmlEditorConfig::get_active();
 		$site = Multisites::inst()->getActiveSite();
 		if($site && $theme = $site->getSiteTheme()){
-			$cssFile = THEMES_DIR . "/$theme/css/editor.css";
+
+			$editorCSS = Config::inst()->get('CMSMain', 'multisites_editor_css_dir');
+			if (isset($editorCSS[$theme])) {
+				$cssFile = THEMES_DIR . "/$theme/" . $editorCSS[$theme] . "/editor.css";
+			} else {
+				$cssFile = THEMES_DIR . "/$theme/css/editor.css";
+			}
+			
 			if(file_exists(BASE_PATH . '/' . $cssFile)){
+				// NOTE: This ensures editor.css is invalided properly when it's updated.
+				$cssFile = $cssFile.'?m='.filemtime(BASE_PATH.'/'.$cssFile);
+				
 				$htmlEditorConfig->setOption('content_css', $cssFile);
 				
 				if($this->owner->getRequest()->isAjax() && $this->owner->class == 'CMSPageEditController'){
@@ -33,7 +50,6 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
 			}	
 		}
 	}
-
 
 
 	/**

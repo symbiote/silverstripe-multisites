@@ -72,11 +72,19 @@ class Multisites {
 			'default' => null,
 			'hosts'   => array()
 		);
-
-		// Order the sites so ones with explicit schemes take priority in the
-		// map.
 		$sites = Site::get();
-		$sites->sort('Scheme', 'DESC');
+
+		/**
+		 *	After duplicating a site, the duplicate contains the same host and causes a 404 during resolution.
+		 *	IMPORTANT, this is required to prevent the site from going down.
+		 *	---
+		 */
+
+		$sites = $sites->sort(array(
+			'ID' => 'DESC'
+		));
+
+		// ---
 
 		foreach($sites as $site) {
 			if($site->IsDefault) {

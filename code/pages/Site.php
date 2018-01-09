@@ -287,6 +287,9 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	 **/
 	public function getSiteTheme(){
 		$theme = $this->Theme;
+		if (!$theme) {
+			$theme = Config::inst()->get('SSViewer', 'theme');
+		}
 		$this->extend('updateGetSiteTheme', $theme);
 		return $theme;
 	}
@@ -318,6 +321,15 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 				'category' => 'Sites',
 			)
 		);
+	}
+
+	/**
+	 *	This corrects an issue when duplicating a site, since the parent comes back as a false object.
+	 */
+
+	public function Parent() {
+
+		return null;
 	}
 
 }
