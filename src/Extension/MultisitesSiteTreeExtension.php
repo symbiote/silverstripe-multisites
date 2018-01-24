@@ -141,7 +141,7 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension
     public function alternateAbsoluteLink($action = null)
     {
         if ($this->owner->SiteID && $this->owner->SiteID == Multisites::inst()->getCurrentSiteId()) {
-            return Director::absoluteURL($this->owner->Link($action));
+            return Director::absoluteURL($this->owner->RelativeLink($action));
         } else {
             return $this->owner->RelativeLink($action);
         }
