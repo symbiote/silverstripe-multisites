@@ -1,5 +1,5 @@
 ---
-Name: extensions
+Name: multisites-extensions
 ---
 SilverStripe\CMS\Controllers\CMSMain:
   extensions:
