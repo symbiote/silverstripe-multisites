@@ -20,6 +20,11 @@ class MultisiteSiteTest extends FunctionalTest
 {
     protected $usesDatabase = true;
 
+    // NOTE(jake): 2018-04-26
+    //
+    // Commented out as this causes a crash in Travis / CI.
+    // Assumption is because SS don't really support this PHPUnit method.
+    //
     /*public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -31,6 +36,24 @@ class MultisiteSiteTest extends FunctionalTest
             $s->delete();
         }
     }*/
+
+    /**
+     * Original value of $_REQUEST
+     *
+     * @var array
+     */
+    protected $origServer = [];
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->origServer = $_SERVER;
+    }
+    protected function tearDown()
+    {
+        $_SERVER = $this->origServer;
+        parent::tearDown();
+    }
 
     public function testSiteResolves()
     {
@@ -53,7 +76,6 @@ class MultisiteSiteTest extends FunctionalTest
     }
 
     public function testSecondSite() {
-
         $_SERVER['HTTP_HOST'] = 'www.test.com';
 
         $otherSite = $this->getTestSite([
@@ -74,10 +96,17 @@ class MultisiteSiteTest extends FunctionalTest
     }
 
     public function testRequestSecondPage() {
+        $_SERVER['HTTP_HOST'] = 'other.test.com';
+        $otherSite = $this->getTestSite([
+            'Title' => 'Testing site',
+            'Host' => 'other.test.com',
+            'Theme' => 'testingtheme',
+            'IsDefault' => false
+        ]);
+
         Multisites::inst()->resetCurrentSite();
         Multisites::inst()->build();
 
-        $_SERVER['HTTP_HOST'] = 'other.test.com';
         $response = $this->get('second-page');
 
         $this->assertEquals(200, $response->getStatusCode());
