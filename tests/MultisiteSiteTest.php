@@ -12,24 +12,25 @@ use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Versioned\Versioned;
 
 /**
- * 
+ *
  *
  * @author marcus
  */
-class TestMultisiteSite extends FunctionalTest
+class MultisiteSiteTest extends FunctionalTest
 {
+    protected $usesDatabase = true;
 
-    public static function setUpBeforeClass()
+    /*public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
 
         Versioned::set_stage('Stage');
-        
+
         foreach (Site::get() as $s) {
             $s->dounpublish();
             $s->delete();
         }
-    }
+    }*/
 
     public function testSiteResolves()
     {
@@ -47,14 +48,14 @@ class TestMultisiteSite extends FunctionalTest
 
 
         // should be www.test.com, because this site is the default
-        
+
         $this->assertEquals('http://www.test.com/test-page/', $page->AbsoluteLink());
     }
 
     public function testSecondSite() {
-        
+
         $_SERVER['HTTP_HOST'] = 'www.test.com';
-        
+
         $otherSite = $this->getTestSite([
             'Title' => 'Testing site',
             'Host' => 'other.test.com',
@@ -64,11 +65,6 @@ class TestMultisiteSite extends FunctionalTest
 
         Multisites::inst()->resetCurrentSite();
         Multisites::inst()->build();
-
-        $s = Site::get()->toNestedArray();
-
-        $currentId = Multisites::inst()->getCurrentSiteId();
-
 
         $page = $this->getTestPage([
             'Title' => 'Second page',
