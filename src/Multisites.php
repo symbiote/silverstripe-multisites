@@ -15,6 +15,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\ORM\DB;
 
 use Psr\SimpleCache\CacheInterface;
 
@@ -90,12 +91,12 @@ class Multisites
     public function init()
     {
         $valid = null;
-        
+
         if ($this->cache->has(self::CACHE_KEY)) {
             $cached = $this->cache->get(self::CACHE_KEY);
             $valid  = $cached && isset($cached['hosts']) && count($cached['hosts']);
         }
-        
+
 
         if ($valid) {
             $this->map = $cached;
@@ -114,8 +115,8 @@ class Multisites
             'hosts' => array()
         );
 
-        
-        if (!\SilverStripe\ORM\DB::get_schema()->hasTable('Site')) {
+        if (!DB::is_active() ||
+            !DB::get_schema()->hasTable(Site::config()->table_name)) {
             return;
         }
 
@@ -220,7 +221,7 @@ class Multisites
 
     /**
      * Reset the currently viewed site
-     * 
+     *
      * Useful for code that under the covers swaps the host that we're
      * looking at, in particular any static publisher functionality
      */
@@ -231,8 +232,8 @@ class Multisites
 
     /**
      * Get's the site related to what is currently being edited in the cms
-     * If a page or site is being edited, it will look up the site of the sitetree being edited, 
-     * If a MultisitesAware object is being managed in ModelAdmin, ModelAdmin will have set a Session variable MultisitesModelAdmin_SiteID  
+     * If a page or site is being edited, it will look up the site of the sitetree being edited,
+     * If a MultisitesAware object is being managed in ModelAdmin, ModelAdmin will have set a Session variable MultisitesModelAdmin_SiteID
      * @return Site
      */
     public function getActiveSite()
@@ -332,10 +333,10 @@ class Multisites
         if (!Injector::inst()->has(HTTPRequest::class)) {
             return null;
         }
-        
+
         $request = Injector::inst()->get(HTTPRequest::class);
         /* @var HTTPRequest $request */
-        
+
         // Skip if the session hasn't been started
         return $request->getSession();
     }
