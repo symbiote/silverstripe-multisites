@@ -1,0 +1,6 @@
+---
+name: multisites-upgrade
+---
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    Site: 'Symbiote\Multisites\Model\Site'

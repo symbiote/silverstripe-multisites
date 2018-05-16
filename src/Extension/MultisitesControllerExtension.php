@@ -81,7 +81,7 @@ class MultisitesControllerExtension extends Extension
         if ($errorPage) {
             Requirements::clear();
             Requirements::clear_combined_files();
-            $response = ModelAsController::controller_for($errorPage)->handleRequest($request, DataModel::inst());
+            $response = ModelAsController::controller_for($errorPage)->handleRequest($request);
             throw new HTTPResponse_Exception($response, $code);
         }
     }
