@@ -1,0 +1,28 @@
+
+/* Used in MultisitesErrorPageExtension */
+.MultisitesErrorPage_NoPubMsg {
+    margin: -5px 0 20px 0;
+    padding: 5px 8px 5px 8px;
+    border-radius: 3px;
+    border: 1px solid #da273b;
+    color: #da273b;
+    text-align: center;
+}
+
+/* Used in MultisitesErrorPageExtension */
+.MultisitesErrorPage_NoPubBtn {
+    padding: 5px 8px 5px 8px;
+    border-radius: 0 3px 3px 0;
+    color: #da273b;
+    border: 1px solid #da273b;
+    border-left: none;
+    pointer-events: none;
+    cursor: none;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Chrome and Opera */
+}
