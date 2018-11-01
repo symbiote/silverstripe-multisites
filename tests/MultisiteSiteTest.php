@@ -12,23 +12,47 @@ use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Versioned\Versioned;
 
 /**
- * 
+ *
  *
  * @author marcus
  */
-class TestMultisiteSite extends FunctionalTest
+class MultisiteSiteTest extends FunctionalTest
 {
+    protected $usesDatabase = true;
 
-    public static function setUpBeforeClass()
+    // NOTE(jake): 2018-04-26
+    //
+    // Commented out as this causes a crash in Travis / CI.
+    // Assumption is because SS don't really support this PHPUnit method.
+    //
+    /*public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
 
         Versioned::set_stage('Stage');
-        
+
         foreach (Site::get() as $s) {
             $s->dounpublish();
             $s->delete();
         }
+    }*/
+
+    /**
+     * Original value of $_REQUEST
+     *
+     * @var array
+     */
+    protected $origServer = [];
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->origServer = $_SERVER;
+    }
+    protected function tearDown()
+    {
+        $_SERVER = $this->origServer;
+        parent::tearDown();
     }
 
     public function testSiteResolves()
@@ -47,14 +71,13 @@ class TestMultisiteSite extends FunctionalTest
 
 
         // should be www.test.com, because this site is the default
-        
+
         $this->assertEquals('http://www.test.com/test-page/', $page->AbsoluteLink());
     }
 
     public function testSecondSite() {
-        
         $_SERVER['HTTP_HOST'] = 'www.test.com';
-        
+
         $otherSite = $this->getTestSite([
             'Title' => 'Testing site',
             'Host' => 'other.test.com',
@@ -65,11 +88,6 @@ class TestMultisiteSite extends FunctionalTest
         Multisites::inst()->resetCurrentSite();
         Multisites::inst()->build();
 
-        $s = Site::get()->toNestedArray();
-
-        $currentId = Multisites::inst()->getCurrentSiteId();
-
-
         $page = $this->getTestPage([
             'Title' => 'Second page',
         ], $otherSite);
@@ -78,10 +96,17 @@ class TestMultisiteSite extends FunctionalTest
     }
 
     public function testRequestSecondPage() {
+        $_SERVER['HTTP_HOST'] = 'other.test.com';
+        $otherSite = $this->getTestSite([
+            'Title' => 'Testing site',
+            'Host' => 'other.test.com',
+            'Theme' => 'testingtheme',
+            'IsDefault' => false
+        ]);
+
         Multisites::inst()->resetCurrentSite();
         Multisites::inst()->build();
 
-        $_SERVER['HTTP_HOST'] = 'other.test.com';
         $response = $this->get('second-page');
 
         $this->assertEquals(200, $response->getStatusCode());

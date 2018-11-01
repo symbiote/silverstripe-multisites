@@ -182,7 +182,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
 		$this->Host = $normalise($this->Host);
 
-		if($aliases = $this->HostAliases->getValue()) {
+		if(!is_array($this->HostAliases) && ($aliases = $this->HostAliases->getValue())) {
 			$this->HostAliases = array_map($normalise, $aliases);
 		}
 
