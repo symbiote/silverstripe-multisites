@@ -1,5 +1,6 @@
 ---
 Name: multisites-extensions
+Before: errorpage-extensions
 ---
 SilverStripe\CMS\Controllers\CMSMain:
   extensions:
