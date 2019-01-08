@@ -7,6 +7,9 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Extension;
+use Symbiote\Multisites\Multisites;
+use Symbiote\Multisites\Model\Site;
+
 /**
  * MultisitesModelAdminExtension
  *
