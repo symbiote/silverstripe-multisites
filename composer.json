@@ -13,6 +13,7 @@
 	"require":
 	{
 		"silverstripe/cms": "~4.0",
+		"silverstripe/admin": "^4.3",
 		"symbiote/silverstripe-multivaluefield": "~5.0"
 	},
     "require-dev": {
@@ -24,7 +25,7 @@
         ],
 		"installer-name": "multisites",
 		"branch-alias": {
-			"dev-master": "5.0.x-dev"
+			"dev-master": "5.2.x-dev"
 		}
 	},
 	"replace": {
