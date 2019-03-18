@@ -10,6 +10,7 @@ use SilverStripe\Core\Extension;
 use Symbiote\Multisites\Multisites;
 use Symbiote\Multisites\Model\Site;
 use Symbiote\Multisites\Extension\MultisitesAware;
+use SilverStripe\Core\ClassInfo;
 
 /**
  * MultisitesModelAdminExtension
