@@ -54,7 +54,10 @@ class MultisitesControllerExtension extends Extension
         if (!$this->owner instanceof \SilverStripe\Admin\LeftAndMain) {
             $theme = $site->getSiteTheme();
             if ($theme) {
-                SSViewer::set_themes([$theme, SSViewer::DEFAULT_THEME]);
+                $selectedThemes = explode(',', $theme);
+                $selectedThemes[] = SSViewer::DEFAULT_THEME;
+                array_walk($selectedThemes, 'trim');
+                SSViewer::set_themes($selectedThemes);
             }
         }
 

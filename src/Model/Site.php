@@ -40,7 +40,7 @@ use SilverStripe\Forms\LiteralField;
 class Site extends Page implements HiddenClass, PermissionProvider {
 
     private static $table_name = 'Site';
-	
+
 	private static $singular_name = 'Site';
 	private static $plural_name = 'Sites';
 	private static $description = 'A page type which provides a subsite.';
@@ -159,7 +159,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	public function AbsoluteLink($action = null){
 		return $this->getURL() . '/';
 	}
-	
+
 	public function Link($action = null) {
 		if ($this->ID && $this->ID == Multisites::inst()->getCurrentSiteId()) {
 			return parent::Link($action);
@@ -197,7 +197,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 
 		//Set MenuTitle to NULL so that Title is used
 		$this->MenuTitle = NULL;
-		
+
 		if($this->ID && Multisites::inst()->assetsSubfolderPerSite() && !$this->Folder()->exists()){
 			$this->FolderID = $this->createAssetsSubfolder();
 		}
@@ -274,26 +274,26 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 	 */
 	static public function get_by_link($link, $cache = true) {
 		$current = Multisites::inst()->getCurrentSiteId();
-		
+
 		if(trim($link, '/')) {
 			$link = trim(Director::makeRelative($link), '/');
 		} else {
 			$link = RootURLController::get_homepage_link();
 		}
-		
+
 		$parts = Convert::raw2sql(preg_split('|/+|', $link));
-		
+
 		// Grab the initial root level page to traverse down from.
 		$URLSegment = array_shift($parts);
-		
+
 		$sitetree   = DataObject::get_one (
 			SiteTree::class, "\"URLSegment\" = '$URLSegment' AND \"ParentID\" = " . $current, $cache
 		);
-		
+
 		if (!$sitetree) {
 			return false;
 		}
-		
+
 		/// Fall back on a unique URLSegment for b/c.
 		if(!$sitetree && self::nested_urls() && $page = DataObject::get(SiteTree::class, "\"URLSegment\" = '$URLSegment'")->First()) {
 			return $page;
@@ -307,7 +307,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 			$next = DataObject::get_one (
 				SiteTree::class, "\"URLSegment\" = '$segment' AND \"ParentID\" = $sitetree->ID", $cache
 			);
-			
+
 			if(!$next) {
 				return false;
 			}
@@ -342,7 +342,7 @@ class Site extends Page implements HiddenClass, PermissionProvider {
 		if(!$this->DevID) return false;
 
 		$sites = Config::inst()->get('Multisites', 'site_features');
-		
+
 		if(!isset($sites[$this->DevID])) return false;
 
 		$features = ArrayLib::valuekey($sites[$this->DevID]);
