@@ -56,6 +56,7 @@ class MultisitesControllerExtension extends Extension
             if ($theme) {
                 $selectedThemes = explode(',', $theme);
                 $selectedThemes[] = SSViewer::DEFAULT_THEME;
+                array_walk($selectedThemes, 'trim');
                 SSViewer::set_themes($selectedThemes);
             }
         }

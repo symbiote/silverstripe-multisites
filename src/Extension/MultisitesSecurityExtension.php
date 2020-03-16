@@ -25,6 +25,7 @@ class MultisitesSecurityExtension extends Extension
         if ($site && $site->Theme) {
             $selectedThemes = explode(',', $site->Theme);
             $selectedThemes[] = SSViewer::DEFAULT_THEME;
+            array_walk($selectedThemes, 'trim');
             SSViewer::set_themes($selectedThemes);
         }
     }
