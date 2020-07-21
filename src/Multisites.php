@@ -238,7 +238,7 @@ class Multisites
      */
     public function getActiveSite()
     {
-        $controller = Controller::curr();
+        $controller = Controller::has_curr() ? Controller::curr() : null;
         if ($controller instanceof CMSPageEditController) {
 
             // requests to admin/pages/edit/EditorToolbar/viewfile?ID=XX
@@ -275,7 +275,9 @@ class Multisites
             }
         }
 
-        if ($id = $controller->getRequest()->getSession()->get('Multisites_ActiveSite')) {
+        $req = $controller ? $controller->getRequest() : null;
+
+        if ($req && $req->getSession() && ($id = $req->getSession()->get('Multisites_ActiveSite'))) {
             return Site::get()->byID($id);
         }
 
