@@ -106,7 +106,7 @@ class MultisitesCMSMainExtension extends LeftAndMainExtension {
             $className = $classNameField->Value();
             if ($className === Site::class) 
             {
-            	$form->Fields()->removeByName(array(SilverStripeNavigator::class));
+            	$form->Fields()->removeByName(['SilverStripeNavigator']);
                 $form->removeExtraClass('cms-previewable');
             }
         }
