@@ -4,6 +4,7 @@ namespace Symbiote\Multisites\Extension;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
+use Symbiote\Multisites\Multisites;
 
 /**
  * MultisitesAware
