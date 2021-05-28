@@ -14,7 +14,7 @@ use SilverStripe\CMS\Model\SiteTreeExtension;
 
 /**
  * Modifies SiteTree behaviour when in a multisite
- * 
+ *
  * @package silverstripe-multisites
  */
 class MultisitesSiteTreeExtension extends SiteTreeExtension
@@ -98,8 +98,11 @@ class MultisitesSiteTreeExtension extends SiteTreeExtension
                 }
             } else {
                 // Create the page beneath the current Site
-                $this->owner->SiteID   = Multisites::inst()->getDefaultSiteId();
-                $this->owner->ParentID = $this->owner->SiteID;
+                $site = Multisites::inst()->getDefaultSite();
+                if ($site) {
+                    $this->owner->SiteID   = $site->ID;
+                    $this->owner->ParentID = $this->owner->SiteID;
+                }
             }
         }
 
