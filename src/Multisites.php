@@ -41,6 +41,12 @@ class Multisites
      * @var Array - A list of features to be used on a given Site, identified by developer_identifiers
      */
     private static $site_features;
+    
+    /**
+     *
+     * @var boolean
+     */
+    private static $allow_site_session_fallback = true;
 
     /**
      *
@@ -183,6 +189,13 @@ class Multisites
      */
     public function getCurrentSiteId()
     {
+        if (self::$allow_site_session_fallback) {
+            $controller = Controller::has_curr() ? Controller::curr() : null;
+            $req = $controller ? $controller->getRequest() : null;
+            if ($id = $req->getSession()->get('Multisites_ActiveSite')) {
+                return $id;
+            }
+        }
 
         // Re-parse the protocol and host to ensure it's in a consistent
         // format.
